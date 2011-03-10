@@ -113,5 +113,23 @@ class JsonFormatter{
      }
      
      
+     /**
+     * Converts an XML string to a JSON string.
+     * 
+     * Adapted from http://pear.php.net/package/Services_JSON
+     * 
+     * 
+     * @param string $xml 
+     * @throws \Exception if $xml is not valid XML
+     * @return string
+     */
+     static public function convertXmlToJson( $xml ){
+                  
+         $xml_element = new \Altumo\Xml\XmlElement($xml);
+         return $xml_element->getAsJsonString();
+                  
+     }
+     
+     
  }
  
