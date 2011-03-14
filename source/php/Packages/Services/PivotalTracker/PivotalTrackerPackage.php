@@ -164,24 +164,63 @@ class PivotalTrackerPackage{
     
     
     /**
-    * Refreshes the Projects collection from the API service.
+    * Refreshes all of the data from the Pivotal API service and insert or 
+    * updates MongoDB.
     * 
     */
-    public function refreshProjects(){
-        
-        $collection = $this->getProjectsCollection();
-        $namespace = $this->getProjectsCollectionNamespace();
-        
-        //get it from the remote service and insert or update the returned objects
+    public function refreshAllData(){
+
+        //get projects
+            $collection = $this->getProjectsCollection();
+            $namespace = $this->getProjectsCollectionNamespace();
+            $project_ids = array();    
             $projects = $this->getClient()->getAllProjects();
             foreach( $projects as $project ){
                 $collection->update( array(
                     'id' => $project->id
                 ), $project, true);
+                $project_ids[] = $project->id;
             }
             //add indexes
             $collection->ensureIndex( array( $namespace . '.id', 1 ) );
             $collection->ensureIndex( array( $namespace . '.name', 1 ) );
+        
+        //get stories
+            $collection = $this->getStoriesCollection();
+            $namespace = $this->getStoriesCollectionNamespace();
+            foreach( $project_ids as $project_id ){
+                $stories = $this->getClient()->getAllStoriesByProjectId($project_id);
+                $priority_order = 0;
+                foreach( $stories as $story ){
+                    
+                    //store the story order (priority).  The story order is the same as the API result order.
+                        $priority_order++;
+                        $story->priority_order = $priority_order;
+                    
+                    //if description is valid json, encode it as "parameters" and empty the description field.                    
+                        $description = $story->description;
+                        if( is_string($description) ){                            
+                            $parameters = json_decode($description);
+                        }else{
+                            $parameters = null;
+                        }
+                        if( !is_null($parameters) ){
+                            $story->parameters = $parameters;
+                            $story->description = '';
+                        }else{
+                            $story->parameters = null;
+                        }
+                    
+                    //save/update the story
+                        $collection->update( array(
+                            'id' => $story->id
+                        ), $story, true);
+                }
+            }
+            //add indexes
+            $collection->ensureIndex( array( $namespace . '.id', 1 ) );
+            $collection->ensureIndex( array( $namespace . '.project_id', 1 ) );
+            $collection->ensureIndex( array( $namespace . '.priority_order', 1 ) );
                 
     }
     
@@ -205,6 +244,28 @@ class PivotalTrackerPackage{
     protected function getProjectsCollectionNamespace(){
         
         return $this->getCollectionNamespace() . 'projects';        
+        
+    }
+    
+    /**
+    * Gets the MongoCollection for the Stories collection.
+    * 
+    * @return \MongoCollection
+    */
+    protected function getStoriesCollection(){
+        
+        return $this->getDatabase()->createCollection( $this->getStoriesCollectionNamespace() ); 
+        
+    }
+    
+    /**
+    * Gets the namespace for the Stories Collection
+    * 
+    * @return string
+    */
+    protected function getStoriesCollectionNamespace(){
+        
+        return $this->getCollectionNamespace() . 'stories';
         
     }
     
@@ -264,6 +325,32 @@ class PivotalTrackerPackage{
                 throw new \Exception('Project not found.');
             }
             return $result;
+            
+    }
+    
+    /**
+    * Gets a stories by Pivotal project id
+    * 
+    * @param integer $project_id
+    * @throws \Exception //if $project_id is not a positive integer
+    * @throws \Exception //if no Project could be found.
+    * @return array
+    */
+    public function getStoriesByProjectId( $project_id ){
+    
+        $project_id = \Altumo\Validation\Numerics::assertPositiveInteger($project_id);
+        
+        $collection = $this->getStoriesCollection();
+        
+        //get it from the database
+            $cursor = $collection->find( array( 'project_id' => (string)$project_id ) );
+            $cursor->sort( array( 'priority_order' => 1 ) );
+            $stories = array();
+            while( $cursor->hasNext() ){
+                $story = $cursor->getNext();
+                $stories[] = $story;
+            }
+            return $stories;
             
     }
     

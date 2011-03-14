@@ -104,5 +104,26 @@ class PivotalTrackerApiClient{
         
     }
     
+    /**
+    * Gets all stories by project id.
+    * 
+    * @param integer $project_id
+    * @return array
+    */
+    public function getAllStoriesByProjectId( $project_id ){
+        
+        try{
+            $project_id = \Altumo\Validation\Numerics::assertPositiveInteger( $project_id );     
+            $stories = $this->sendRequest( '/services/v3/projects/' . $project_id . '/stories' );
+            if( property_exists($stories, 'story') ){
+                $stories = $stories->story;
+            }
+        }catch( \Exception $e ){
+            $stories = array();
+        }
+        return $stories;
+        
+    }
+    
     
 }
