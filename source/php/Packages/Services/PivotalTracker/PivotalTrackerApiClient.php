@@ -85,13 +85,22 @@ class PivotalTrackerApiClient{
     
     
     /**
-    * Gets all projects under this token.
+    * Gets all projects visible from this api token (may include projects 
+    * from several accounts).
     * 
     * @return array
     */
     public function getAllProjects(){
         
-        return $this->sendRequest( '/services/v3/projects' );
+        try{
+            $projects = $this->sendRequest( '/services/v3/projects' );
+            if( property_exists($projects, 'project') ){
+                $projects = $projects->project;
+            }
+        }catch( \Exception $e ){
+            $projects = array();
+        }
+        return $projects;
         
     }
     

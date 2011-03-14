@@ -42,6 +42,25 @@ class Strings{
         }
                 
     }
+    
+    
+    /**
+    * Throws an exception if this is not a string (or castable as one).
+    * Returns the string if it was cast as one.
+    * 
+    * @param mixed $string
+    * @throws Exception //if argument passed is not a string
+    * @return string
+    */
+    static public function assertString( $string ){
+        
+        if( !is_string($string) ){
+            throw new \Exception('Value passed is not a string.');
+        }else{
+            return $string;
+        }
+                
+    }
 
     
 }

@@ -25,7 +25,8 @@ namespace Altumo\Packages\Services\PivotalTracker;
 class PivotalTrackerPackage{
         
     protected $token = null;
-    protected $collection = null;
+    protected $database = null;
+    protected $collection_namespace = '';
     protected $client = null;
     
     
@@ -35,17 +36,20 @@ class PivotalTrackerPackage{
     * @param string $token 
     * //your PivotalTracker API token
     * 
-    * @param MongoCollection $collection 
+    * @param MongoDB $database
     * //the collection for this package to persist
     * 
     * @throws \Exception //if $token is not a non-empty string
     * @throws \Exception //if $collection is not a MongoDB object
     * @return Altumo\Packages\Services\PivotalTracker\PivotalTrackerPackage
     */
-    public function __construct( $token, $collection ){
+    public function __construct( $token, $database, $collection_namespace = 'pivotal.' ){
         
         $this->setToken($token);
-        $this->setCollection($collection);
+        $this->setDatabase($database);
+        if( !is_null($collection_namespace) ){
+            $this->setCollectionNamespace($collection_namespace);
+        }
         
     }
     
@@ -74,55 +78,57 @@ class PivotalTrackerPackage{
         
     }
         
-        
+  
     /**
-    * Setter for the collection field on this PivotalTrackerPackage.
+    * Setter for the database field on this PivotalTrackerPackage.
     * 
-    * @param MongoCollection $collection
-    * @throws \Exception //if $collection is not a MongoCollection object
+    * @param MongoDB $database
+    * @throws \Exception //if $collection is not a MongoDB object
     */
-    public function setCollection( $collection ){
+    public function setDatabase( $database ){
     
-        if( !($collection instanceof \MongoCollection) ){
-            throw new \Exception('Collection must be a MongoCollection object.');
+        if( !($database instanceof \MongoDB) ){
+            throw new \Exception('Database must be a MongoDB object.');
         }
-        $this->collection = $collection;
+        $this->database = $database;
         
     }
     
     
     /**
-    * Getter for the collection field on this PivotalTrackerPackage.
+    * Getter for the database field on this PivotalTrackerPackage.
     * 
-    * @return MongoCollection
+    * @return MongoDB
     */
-    public function getCollection(){
+    public function getDatabase(){
     
-        return $this->collection;
+        return $this->database;
         
     }
+
+    
+    /**
+    * Setter for the collection_namespace field on this PivotalTrackerPackage.
+    * 
+    * @param string $collection_namespace
+    * @throws \Exception //if $collection_namespace is not a string
+    */
+    public function setCollectionNamespace( $collection_namespace ){
+    
+        $collection_namespace = \Altumo\Validation\Strings::assertString($collection_namespace);
+        $this->collection_namespace = $collection_namespace;
         
+    }
     
     
     /**
-    * Gets an array of the project names (with the IDs as array keys).
+    * Getter for the collection_namespace field on this PivotalTrackerPackage.
     * 
-    * @return array
+    * @return string
     */
-    public function getProjectNames(){
+    public function getCollectionNamespace(){
     
-        $collection = $this->getCollection();
-        
-        //get it from the database (if not stale)
-                
-        
-        //get it from the remote service
-        $projects = $this->getClient()->getAllProjects();
-        
-        $collection->insert($projects);
-        
-        return $projects;
-              
+        return $this->collection_namespace;
         
     }
         
@@ -156,5 +162,111 @@ class PivotalTrackerPackage{
         
     
     
+    
+    /**
+    * Refreshes the Projects collection from the API service.
+    * 
+    */
+    public function refreshProjects(){
+        
+        $collection = $this->getProjectsCollection();
+        $namespace = $this->getProjectsCollectionNamespace();
+        
+        //get it from the remote service and insert or update the returned objects
+            $projects = $this->getClient()->getAllProjects();
+            foreach( $projects as $project ){
+                $collection->update( array(
+                    'id' => $project->id
+                ), $project, true);
+            }
+            //add indexes
+            $collection->ensureIndex( array( $namespace . '.id', 1 ) );
+            $collection->ensureIndex( array( $namespace . '.name', 1 ) );
+                
+    }
+    
+    
+    /**
+    * Gets the MongoCollection for the Projects collection.
+    * 
+    * @return \MongoCollection
+    */
+    protected function getProjectsCollection(){
+        
+        return $this->getDatabase()->createCollection( $this->getProjectsCollectionNamespace() ); 
+        
+    }
+    
+    /**
+    * Gets the namespace for the Projects Collection
+    * 
+    * @return string
+    */
+    protected function getProjectsCollectionNamespace(){
+        
+        return $this->getCollectionNamespace() . 'projects';        
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /**
+    * Gets an array of the project names (with the IDs as array keys).
+    * The project names are in alphabetical order.
+    * 
+    * @return array
+    */
+    public function getProjectNames(){
+    
+        $collection = $this->getProjectsCollection();
+        $namespace = $this->getProjectsCollectionNamespace();
+        
+        //get it from the database
+            $cursor = $collection->find( array(), array( 'id' => 1, 'name' => 1 ) );
+            $cursor->sort( array( 'name' => 1 ) );
+            $projects = array();
+            while( $cursor->hasNext() ){
+                $project = $cursor->getNext();
+                $projects[ $project['id'] ] = $project['name'];
+            }
+            return $projects;
+            
+    }
+    
+    
+    /**
+    * Gets a project by Pivotal project id
+    * 
+    * @param integer $project_id
+    * @throws \Exception //if $project_id is not a positive integer
+    * @throws \Exception //if no Project could be found.
+    * @return array
+    */
+    public function getProjectById( $project_id ){
+    
+        $project_id = \Altumo\Validation\Numerics::assertPositiveInteger($project_id);
+        
+        $collection = $this->getProjectsCollection();
+        
+        //get it from the database
+            $result = $collection->findOne( array( 'id' => (string)$project_id ) );
+            if( !$result ){
+                throw new \Exception('Project not found.');
+            }
+            return $result;
+            
+    }
+    
+
     
 }
