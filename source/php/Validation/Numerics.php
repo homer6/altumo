@@ -85,9 +85,23 @@ class Numerics{
         
     }
     
-    
-    
-   
+    /**
+    * Determines if this is an integer (or castable as one).
+    * 
+    * @param mixed $integer
+    * @return boolean
+    */
+    static public function isInteger( $integer ){
+        
+        try{
+            self::assertInteger($integer);
+            return true;
+        }catch( \Exception $e ){
+            return false;
+        }        
+        
+    }
+
     
     /**
     * Throws an exception if this is not an unsigned double.

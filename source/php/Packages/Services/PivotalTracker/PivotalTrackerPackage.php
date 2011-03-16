@@ -171,26 +171,35 @@ class PivotalTrackerPackage{
     public function refreshAllData(){
 
         //get projects
-            $collection = $this->getProjectsCollection();
-            $namespace = $this->getProjectsCollectionNamespace();
+            $project_collection = $this->getProjectsCollection();
+            $project_namespace = $this->getProjectsCollectionNamespace();
             $project_ids = array();    
             $projects = $this->getClient()->getAllProjects();
             foreach( $projects as $project ){
-                $collection->update( array(
+                $project_collection->update( array(
                     'id' => $project->id
                 ), $project, true);
                 $project_ids[] = $project->id;
             }
             //add indexes
-            $collection->ensureIndex( array( $namespace . '.id', 1 ) );
-            $collection->ensureIndex( array( $namespace . '.name', 1 ) );
+            $project_collection->ensureIndex( array( $project_namespace . '.id', 1 ) );
+            $project_collection->ensureIndex( array( $project_namespace . '.name', 1 ) );
         
         //get stories
-            $collection = $this->getStoriesCollection();
-            $namespace = $this->getStoriesCollectionNamespace();
+            $story_collection = $this->getStoriesCollection();
+            $story_namespace = $this->getStoriesCollectionNamespace();
             foreach( $project_ids as $project_id ){
+                
                 $stories = $this->getClient()->getAllStoriesByProjectId($project_id);
                 $priority_order = 0;
+                $all_parameters = array();
+                
+                //empty the aggregated project parameters to this project
+                    $project_collection->update( array(
+                        'id' => $project_id
+                    ), array( '$set' => array( 'description' => new \stdClass() ) ), true);
+                    
+                
                 foreach( $stories as $story ){
                     
                     //store the story order (priority).  The story order is the same as the API result order.
@@ -200,27 +209,43 @@ class PivotalTrackerPackage{
                     //if description is valid json, encode it as "parameters" and empty the description field.                    
                         $description = $story->description;
                         if( is_string($description) ){                            
-                            $parameters = json_decode($description);
+                            $parameters = json_decode($description, true);
                         }else{
                             $parameters = null;
                         }
                         if( !is_null($parameters) ){
-                            $story->parameters = $parameters;
-                            $story->description = '';
+                            //save the parameters to the story as an object
+                                $story->parameters = $parameters;
+                            
+                                $all_parameters = \Altumo\Arrays\Arrays::mergeArraysRecursivelyAsLists( $all_parameters, $parameters );
+                                
+                            //empty the description
+                                $story->description = '';
+                                
                         }else{
                             $story->parameters = null;
                         }
                     
                     //save/update the story
-                        $collection->update( array(
+                        $story_collection->update( array(
                             'id' => $story->id
                         ), $story, true);
                 }
+                
+                //save the aggregated project parameters to this project
+                    $all_parameters = \Altumo\Arrays\Arrays::removeNullValuesRecursively( $all_parameters );
+                    if( empty($all_parameters) ){
+                        $all_parameters = new \stdClass();
+                    }
+                    $project_collection->update( array(
+                        'id' => $project_id
+                    ), array( '$set' => array( 'description' => $all_parameters ) ), true);
+
             }
             //add indexes
-            $collection->ensureIndex( array( $namespace . '.id', 1 ) );
-            $collection->ensureIndex( array( $namespace . '.project_id', 1 ) );
-            $collection->ensureIndex( array( $namespace . '.priority_order', 1 ) );
+            $story_collection->ensureIndex( array( $story_namespace . '.id', 1 ) );
+            $story_collection->ensureIndex( array( $story_namespace . '.project_id', 1 ) );
+            $story_collection->ensureIndex( array( $story_namespace . '.priority_order', 1 ) );
                 
     }
     
