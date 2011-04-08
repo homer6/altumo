@@ -215,6 +215,7 @@ class UniversalClassLoader
     {
         $class = ltrim($class, '\\');
 
+        
         /*
         $debug = function(){
             $arguments = func_get_args();           
@@ -224,7 +225,7 @@ class UniversalClassLoader
             }            
             exit();
         };
-        */ 
+        */         
         
         if (false !== ($pos = strrpos($class, '\\'))) {
             // namespaced class name
@@ -240,9 +241,13 @@ class UniversalClassLoader
                             return;
                         }
                         $relative_namespace = substr( $namespace, 1 );
-                        $without_top_namespace = substr( $relative_namespace, strpos($relative_namespace, '\\') + 1 );
-                        $file_without_top_namespace = $dir.DIRECTORY_SEPARATOR.str_replace('\\', DIRECTORY_SEPARATOR, $without_top_namespace).DIRECTORY_SEPARATOR.str_replace('_', DIRECTORY_SEPARATOR, $className).'.php';
-                        //$debug( $file, $className, $namespace, $ns, $dirs, $without_top_namespace, $file_without_top_namespace );
+                        if( strpos($relative_namespace, '\\') ){
+                            $without_top_namespace = substr( $relative_namespace, strpos($relative_namespace, '\\') + 1 ) . DIRECTORY_SEPARATOR;
+                        }else{
+                            $without_top_namespace = '';
+                        }
+                        $file_without_top_namespace = $dir . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $without_top_namespace) . str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
+                        //$debug( $file, $className, $namespace, $ns, $dirs, $relative_namespace, $without_top_namespace, $file_without_top_namespace, $dir );
                         if (file_exists($file_without_top_namespace)) {
                             require $file_without_top_namespace;
                             return;
