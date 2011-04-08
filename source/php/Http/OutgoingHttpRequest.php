@@ -779,7 +779,9 @@ class OutgoingHttpRequest{
     */
     public function closeCurlHandle(){
         if( !is_null($this->curl_handle) ){
-            curl_close($this->curl_handle);
+            if( is_resource($this->curl_handle) ){
+                curl_close($this->curl_handle);
+            }
             $this->curl_handle = null;
         }
     }
@@ -835,7 +837,9 @@ class OutgoingHttpRequest{
     public function __destruct(){
           
         $this->closeCurlHandle();
-        unlink( $this->getCookieFilename() );
+        if( file_exists($this->getCookieFilename()) ){
+            unlink( $this->getCookieFilename() );
+        }        
                
     }
     
