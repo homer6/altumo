@@ -1,9 +1,0 @@
-Dependencies:
- 
-   - PHP 5.3.4
-
-Installation:
-
-   - git clone git://github.com/homer6/altumo.git
-   - cd altumo
-   - git submodule update --init --recursive
