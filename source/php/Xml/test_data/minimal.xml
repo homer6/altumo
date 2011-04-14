@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<nutrition>
+    <daily-values>
+        <total-fat units="g">65</total-fat>
+        <saturated-fat units="g">20</saturated-fat>
+        <cholesterol units="mg">300</cholesterol>
+        <sodium units="mg">2400</sodium>
+        <carb units="g">300</carb>
+        <fiber units="g">25</fiber>
+        <protein units="g">50</protein>
+    </daily-values>
+
+    <food>
+        <name>Avocado Dip</name>
+        <mfr>Sunnydale</mfr>
+        <serving units="g">29</serving>
+        <calories total="110" fat="100"/>
+        <total-fat>11</total-fat>
+        <saturated-fat>3</saturated-fat>
+        <cholesterol>5</cholesterol>
+        <sodium>210</sodium>
+        <carb>2</carb>
+        <fiber>0</fiber>
+        <protein>1</protein>
+        <vitamins>
+            <a>0</a>
+            <c>0</c>
+        </vitamins>
+        <minerals>
+            <ca>0</ca>
+            <fe>0</fe>
+        </minerals>
+    </food>
+
+    <food>
+        <name>Bagels, New York Style </name>
+        <mfr>Thompson</mfr>
+        <serving units="g">104</serving>
+        <calories total="300" fat="35"/>
+        <total-fat>4</total-fat>
+        <saturated-fat>1</saturated-fat>
+        <cholesterol>0</cholesterol>
+        <sodium>510</sodium>
+        <carb>54</carb>
+        <fiber>3</fiber>
+        <protein>11</protein>
+        <vitamins>
+            <a>0</a>
+            <c>0</c>
+        </vitamins>
+        <minerals>
+            <ca>8</ca>
+            <fe>20</fe>
+        </minerals>
+    </food>
+</nutrition> 
