@@ -126,30 +126,11 @@ class JsonFormatter{
     */
     static public function convertXmlToJson( $xml ){
               
-     $xml_element = new \Altumo\Xml\XmlElement($xml);
-     return $xml_element->getAsJsonString();
-              
+        $xml_element = new \Altumo\Xml\XmlElement($xml);
+        return $xml_element->getAsJsonString();
+                
     }
      
-     
-    /**
-    * Encodes json with json_encode and also escapes the control characters.
-    * 
-    * @see http://stackoverflow.com/questions/1048487/phps-json-encode-does-not-escape-all-json-control-characters/3562421#3562421
-    * @param mixed $structure
-    * @return string
-    */
-    static public function jsonEncode( $structure ){
-     
-        $json = json_encode($structure);
-        /*
-        $search = array( "\r\n", "\n", "\r", "\u", "\t", "\f", "\b" );
-        $replace = array( '\r\n', '\n', '\r', '\u', '\t', '\f', '\b' );
-        $encoded_string = str_replace($search, $replace, $json);
-        */
-        return $json;
-     
-    }
 
 
 
