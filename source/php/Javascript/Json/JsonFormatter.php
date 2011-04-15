@@ -13,8 +13,8 @@
 
 
 namespace Altumo\Javascript\Json;
- 
- 
+
+
 /**
 * This class formats JSON strings into pretty JSON strings.
 * 
@@ -23,113 +23,135 @@ namespace Altumo\Javascript\Json;
 class JsonFormatter{
      
      
-     /**
-     * Echos a string to the screen in a nice display of hex values and exits.
-     * 
-     * 
-     * @param string $string
-     */
-     static public function hexDump( $string ){
-         
-         echo '<pre>';
-         for( $position = 0; $position < strlen($string); $position++ ){
-                                       
-             $character = $string[$position];             
-             if( $position != 0 ){
-                 echo " ";
-                 if( $position % 4 == 0 ){
-                     echo " ";
-                 }
-                 if( $position % 16 == 0 ){
-                     echo "\n";
-                 }
-             }
-             echo dechex(ord($character));
-         }
-         exit();
-         
-     }
+    /**
+    * Echos a string to the screen in a nice display of hex values and exits.
+    * 
+    * 
+    * @param string $string
+    */
+    static public function hexDump( $string ){
      
+        echo '<pre>';
+        for( $position = 0; $position < strlen($string); $position++ ){
+
+            $character = $string[$position];
+            if( $position != 0 ){
+                echo " ";
+                if( $position % 4 == 0 ){
+                    echo " ";
+                }
+                if( $position % 16 == 0 ){
+                    echo "\n";
+                }
+            }
+            echo dechex(ord($character));
+            
+        }
+        exit();
      
-     /**
-     * Formats a JSON string into a pretty JSON string.
-     * 
-     * @todo Fix so text-qualified characters eg. ",{[" don't break formatting.
-     * 
-     * @param string $json
-     * @return string
-     */
-     static public function format( $json ){
-         
-         $indent_character = '    ';
-         $indent_count = 0;         
-         $json_length = strlen($json);
-         
-         $position = 0;
-                  
-         $insert_newline_after = function( $offset ) use ( &$json, &$indent_character, &$indent_count, &$position ){
+    }
+
+
+    /**
+    * Formats a JSON string into a pretty JSON string.
+    * 
+    * @todo Fix so text-qualified characters eg. ",{[" don't break formatting.
+    * 
+    * @param string $json
+    * @return string
+    */
+    static public function format( $json ){
+     
+        $indent_character = '    ';
+        $indent_count = 0;         
+        $json_length = strlen($json);
+
+        $position = 0;
+
+        $insert_newline_after = function( $offset ) use ( &$json, &$indent_character, &$indent_count, &$position ){
             $indent = str_repeat($indent_character, $indent_count);
             $json = \Altumo\String\String::insert( "\n" . $indent, $json, $offset + 1 );
             $position += strlen($indent) + 1;
-         };
-         
-         for( ; $position < $json_length; $position++ ){
-                                       
-             $character = $json[$position];             
-             switch( $character ){
-                 
+        };
+
+        for( ; $position < $json_length; $position++ ){
+
+            $character = $json[$position];             
+            switch( $character ){
+
                 case ':':
-                        //insert a space after colons
-                        $json = \Altumo\String\String::insert( " ", $json, $position + 1 );
-                        $position++;
+                    //insert a space after colons
+                    $json = \Altumo\String\String::insert( " ", $json, $position + 1 );
+                    $position++;
                     break;
-                 
+
                 case ',':
-                        $insert_newline_after($position);
+                    $insert_newline_after($position);
                     break;
-                    
+
                 case '[':
                 case '{':
-                        $indent_count++;
-                        $insert_newline_after($position);
+                    $indent_count++;
+                    $insert_newline_after($position);
                     break;
-                    
+
                 case ']':
                 case '}':
-                        $indent_count--;
-                        $insert_newline_after($position - 1);
+                    $indent_count--;
+                    $insert_newline_after($position - 1);
 
                     break;
-                    
+
                 default:
-                                                     
+                             
             };
             $json_length = strlen($json);
 
-         }
-         
-         return $json;
-         
-     }
+        }
+
+        return $json;
+     
+    }
      
      
-     /**
-     * Converts an XML string to a JSON string.
-     * 
-     * Adapted from http://pear.php.net/package/Services_JSON
-     * 
-     * 
-     * @param string $xml 
-     * @throws \Exception if $xml is not valid XML
-     * @return string
-     */
-     static public function convertXmlToJson( $xml ){
-                  
-         $xml_element = new \Altumo\Xml\XmlElement($xml);
-         return $xml_element->getAsJsonString();
-                  
-     }
+    /**
+    * Converts an XML string to a JSON string.
+    * 
+    * Adapted from http://pear.php.net/package/Services_JSON
+    * 
+    * 
+    * @param string $xml 
+    * @throws \Exception if $xml is not valid XML
+    * @return string
+    */
+    static public function convertXmlToJson( $xml ){
+              
+     $xml_element = new \Altumo\Xml\XmlElement($xml);
+     return $xml_element->getAsJsonString();
+              
+    }
      
      
- }
+    /**
+    * Encodes json with json_encode and also escapes the control characters.
+    * 
+    * @see http://stackoverflow.com/questions/1048487/phps-json-encode-does-not-escape-all-json-control-characters/3562421#3562421
+    * @param mixed $structure
+    * @return string
+    */
+    static public function jsonEncode( $structure ){
+     
+        $json = json_encode($structure);
+        /*
+        $search = array( "\r\n", "\n", "\r", "\u", "\t", "\f", "\b" );
+        $replace = array( '\r\n', '\n', '\r', '\u', '\t', '\f', '\b' );
+        $encoded_string = str_replace($search, $replace, $json);
+        */
+        return $json;
+     
+    }
+
+
+
+}
  
