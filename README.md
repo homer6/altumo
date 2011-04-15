@@ -3,10 +3,12 @@ Overview
 Altumo is a library of tools for web development under the MIT License.
 
 It currenly contains source code that includes:
+
     - php classes
     - linux bash scripts
    
-In future versions, we plan for it to contain:   
+In future versions, we plan for it to contain:
+
     - javascript components based in google closure
     - javascript services based in node.js
     - c and c++ classes and functions
