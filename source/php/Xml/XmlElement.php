@@ -30,7 +30,7 @@ class XmlElement{
     protected $errors = array();
     protected $xml_element = null;
     
-    const RETURN_TYPE_WF_XML_ELEMENT = 1;
+    const RETURN_TYPE_XML_ELEMENT = 1;
     const RETURN_TYPE_STRING = 2;
         
     
@@ -85,7 +85,7 @@ class XmlElement{
     
     /**
     * Queries this document and returns an array of strings the result of the xpath query
-    * Returns an array of XmlElement objects if $return_type = XmlElement::RETURN_TYPE_WF_XML_ELEMENT
+    * Returns an array of XmlElement objects if $return_type = XmlElement::RETURN_TYPE_XML_ELEMENT
     * 
     * @param string $xpath_query
     * @param integer $return_type
@@ -123,7 +123,7 @@ class XmlElement{
                     }
                 }                
             
-            }elseif( $return_type === self::RETURN_TYPE_WF_XML_ELEMENT ){
+            }elseif( $return_type === self::RETURN_TYPE_XML_ELEMENT ){
                 
                 if( $results instanceof \SimpleXMLElement ){
                     return array(
