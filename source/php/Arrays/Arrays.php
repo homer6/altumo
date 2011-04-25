@@ -206,11 +206,7 @@ class Arrays{
         return $array;
         
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 94a5fe8bee03d59e48cf238805e079315ac9d616
-  
+    
     
     /**
     * Retrieve a value from $array by $key if $array[$key] is set, or return null otherwise
@@ -287,13 +283,4 @@ class Arrays{
         return false;
 
     }
-
-<<<<<<< HEAD
-=======
-    
->>>>>>> d52f8f9307186d67fb73ab0347d774f0c116efc0
-=======
->>>>>>> 94a5fe8bee03d59e48cf238805e079315ac9d616
 }
-
-

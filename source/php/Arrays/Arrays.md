@@ -362,10 +362,6 @@ The \Altumo\Arrays\Arrays class is a collection of static methods for manipulati
       ["height"]=>
       string(5) "165cm"
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 94a5fe8bee03d59e48cf238805e079315ac9d616
 
 
 
@@ -441,8 +437,3 @@ The \Altumo\Arrays\Arrays class is a collection of static methods for manipulati
 ### Output 1
 
     null
-<<<<<<< HEAD
-=======
->>>>>>> d52f8f9307186d67fb73ab0347d774f0c116efc0
-=======
->>>>>>> 94a5fe8bee03d59e48cf238805e079315ac9d616
