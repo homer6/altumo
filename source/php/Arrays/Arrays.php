@@ -206,7 +206,94 @@ class Arrays{
         return $array;
         
     }
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 94a5fe8bee03d59e48cf238805e079315ac9d616
+  
     
+    /**
+    * Retrieve a value from $array by $key if $array[$key] is set, or return null otherwise
+    * 
+    * @author Juan Jaramillo <juan.jaramillo@altumo.com>
+    * 
+    * @param array $array
+    * @param string $key    // array key
+    * @param mixed $default // default value to return if $array[$key] is not set
+    * @throws \Exception    // if $array was not an array or if $key is not a non-empty string
+    * @return mixed         // value of $array[$key] if it is set, or $default
+    */
+    static public function getValueIfSet( $array, $key, $default = null ){
+
+        //validate
+            if( !is_array($array) ){
+                throw new \Exception('The first parameter must be an array.');
+            }            
+
+            try {
+                \Altumo\Validation\Strings::assertNonEmptyString( $key );
+            } catch ( \Exception $e ){
+                throw new \Exception( 'The second parameter must be a non-empty string.' );
+            }
+
+
+        // Retrieve Value   
+            if( isset($array[$key]) ){
+                return $array[$key];
+            }
+
+
+        return $default;
+        
+    }
+    
+    
+    
+    /**
+    * If the $key specified exists in $array, then
+    * $callback will be invoked with $array[$key] as a parameter. 
+    * 
+    * @param array $array 
+    * @param string $key        // Non-empty name of a key to find in $array
+    * @param array $callback    // A php "callable" to use as a callback
+    * 
+    * @throws \Exception        //if $array is not an array, $key is not a string or $callback is not callable
+    * @return mixed             // whatever the response of $callback was (if invoked) or false otherwise.
+    */
+    static public function callIfKeyExists( $array, $key, $callback ){
+        
+        //validate
+            if( !is_array($array) ){
+                throw new \Exception( 'The first parameter must be an array.' );
+            }            
+            
+            try {
+                \Altumo\Validation\Strings::assertNonEmptyString( $key );
+            } catch ( \Exception $e ){
+                throw new \Exception( 'The second parameter must be a non-empty string.' );
+            }
+            
+            if( !is_callable( $callback ) ){
+                throw new \Exception( 'The third parameter must be a callable' );
+            }
+            
+            
+            
+        // If key is set, call apply function
+            if( isset( $array[$key] ) ){
+                return call_user_func( $callback, $array[$key] );
+            }
+        
+        return false;
+
+    }
+
+<<<<<<< HEAD
+=======
+    
+>>>>>>> d52f8f9307186d67fb73ab0347d774f0c116efc0
+=======
+>>>>>>> 94a5fe8bee03d59e48cf238805e079315ac9d616
 }
 
 
