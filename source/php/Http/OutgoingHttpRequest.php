@@ -263,6 +263,21 @@ class OutgoingHttpRequest{
     }
     
     /**
+    * Sends the HTTP Request and returns the response as a HttpResponseMessage.
+    * 
+    * @param boolean $populate_curl_info
+    * @throws \Exception on error.
+    * @return \Altumo\Http\HttpResponseMessage
+    */
+    public function sendAndGetResponseMessage( $populate_curl_info = false ){
+        
+        $response = $this->send( true, $populate_curl_info );
+        return new \Altumo\Http\HttpResponseMessage($response);
+            
+    }
+    
+    
+    /**
     * Sets all of the parameters for this request.
     * This WILL REPLACE the any pre-existing parameters.
     * 
@@ -279,6 +294,19 @@ class OutgoingHttpRequest{
     }
     
     /**
+    * Sets the message body for POST, PUT or DELETE requests. This will replace
+    * any parameters that have been set.
+    * 
+    * @param string $message_body
+    */
+    public function setMessageBody( $message_body ){
+        
+        $this->setParameters( $message_body );
+        
+    }
+    
+    
+    /**
     * Accessor for the parameters
     *
     * @return array 
@@ -292,6 +320,7 @@ class OutgoingHttpRequest{
     /**
     * Get parameters formatted as required for POST requests.
     * 
+    * @return string
     */
     public function getParametersFormattedForPost(){
         $parameters = $this->getParameters();
