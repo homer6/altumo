@@ -29,7 +29,7 @@ class HttpResponseMessage{
             
     protected $headers = array();
     protected $lowercase_headers = array();
-    protected $message_body = '';
+    protected $raw_message_body = '';
     protected $raw_http_response = '';
     
     /**
@@ -77,7 +77,7 @@ class HttpResponseMessage{
             }
         }
 
-        $this->setMessageBody( implode('', $raw_response_parts) );
+        $this->setRawMessageBody( implode('', $raw_response_parts) );
         
     }
     
@@ -276,52 +276,52 @@ class HttpResponseMessage{
         
     }
         
-    
-    /**
-    * Setter for the message_body field on this HttpResponseMessage.
-    * 
-    * @param string $message_body
-    */
-    protected function setMessageBody( $message_body ){
-    
-        $this->message_body = $message_body;
-        
-    }
-    
-    
+   
     /**
     * Getter for the message_body field on this HttpResponseMessage.
-    * If this message body was gzipped, it will unzip it.
+    * If this message body was gzipped, it will unzip it.  Else, it 
+    * will return the raw message body.
     * 
     * @throws \Exception //if content was gzipped encoded, but 
     * @return string
     */
-    public function getUncompressedMessageBody(){
+    public function getMessageBody(){
     
         $content_encoding = $this->getHeader('Content-Encoding');
         if( !is_null($content_encoding) && strtolower($content_encoding) == 'gzip' ){
             if( !extension_loaded('zlib') ){
                 throw new \Exception('The php zlib extension was not loaded. It is required to inflate this message body.');
             }else{
-                return gzinflate( substr($this->message_body, 10) );
+                return gzinflate( substr($this->raw_message_body, 10) );
             }
         }
         
-        return $this->message_body;
+        return $this->raw_message_body;
         
     }
     
     /**
-    * Getter for the message_body field on this HttpResponseMessage.
+    * Setter for the raw_message_body field on this HttpResponseMessage.
+    * 
+    * @param string $raw_message_body
+    */
+    protected function setRawMessageBody( $raw_message_body ){
+    
+        $this->raw_message_body = $raw_message_body;
+        
+    }
+    
+    
+    /**
+    * Getter for the raw_message_body field on this HttpResponseMessage.
     * 
     * @return string
     */
-    public function getMessageBody(){
+    public function getRawMessageBody(){
     
-        return $this->message_body;
+        return $this->raw_message_body;
         
-    }
-        
+    }   
     
     /**
     * Setter for the raw_http_response field on this HttpResponseMessage.
