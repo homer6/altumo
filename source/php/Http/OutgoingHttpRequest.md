@@ -17,7 +17,7 @@ response.
     try{
         
         //load class autoloader
-            require_once( __DIR__ . '/loader.php' );  //you should ensure that is is the correct path for this file
+            require_once( __DIR__ . '/loader.php' );  //you should ensure that this is the correct path for this file
     
         //make the response; return the response with the headers
             $client = new \Altumo\Http\OutgoingHttpRequest( 'http://www.domain.com/checkuser.php', array(
