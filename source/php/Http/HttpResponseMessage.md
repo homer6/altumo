@@ -22,7 +22,7 @@ elements to the page.
         
         //parse the http response
             $http_response = new \Altumo\Http\HttpResponseMessage( $response );    
-            $xml = $http_response->getMessageBody();
+            $xml = $http_response->getMessageBody();  //this will unzip it if the response is gzipped
             
         //optionally, use the xml wrapper to find what you're looking for
             $xml_element = new \Altumo\Xml\XmlElement( $xml );    
