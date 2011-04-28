@@ -125,11 +125,11 @@ class OutgoingHttpRequest{
             
             if( $this->isPutRequest() ){
                 curl_setopt( $curl_handle, CURLOPT_CUSTOMREQUEST, "PUT" );
+                curl_setopt( $curl_handle, CURLOPT_PUT, 1 );
                 $message_body = $this->getMessageBody();
                 $temp_file = tmpfile();
                 fwrite($temp_file, $message_body);
                 fseek($temp_file, 0);
-                curl_setopt( $curl_handle, CURLOPT_PUT, 1 );                
                 curl_setopt( $curl_handle, CURLOPT_INFILE, $temp_file );
                 curl_setopt( $curl_handle, CURLOPT_INFILESIZE, strlen($message_body));
             }
@@ -250,16 +250,17 @@ class OutgoingHttpRequest{
             if( $populate_curl_info ){
                 $this->setCurlInfo( curl_getinfo($curl_handle) );
             }
-            if( $response === false ){
-                $error_message = curl_error($curl_handle);
-                //curl_close($curl_handle);
-                throw new \Exception('CURL Request Failed: ' . $error_message );
-            }else{
-                //curl_close($curl_handle);
-            }
             
-            if( isset($temp_file) ){
-                fclose($temp_file);
+            //clean up the temp file, if this was a PUT
+                if( isset($temp_file) ){
+                    fclose($temp_file); //this also deletes the file                    
+                }
+            
+            if( $response === false ){
+                
+                $error_message = curl_error($curl_handle);                
+                throw new \Exception('CURL Request Failed: ' . $error_message );
+                
             }
             
             return $response;
