@@ -498,9 +498,6 @@ class OutgoingHttpRequest{
     */
     public function getFullUrl(){
         
-        //get return the url without the get parameters if it's a post request
-            if( $this->getRequestMethod() !== OutgoingHttpRequest::HTTP_METHOD_GET ) return $this->getUrl();
-        
         $parameters = $this->getParameters();
         if( empty($parameters) ){
             return $this->getUrl();
