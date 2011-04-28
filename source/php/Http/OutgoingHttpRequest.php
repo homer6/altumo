@@ -31,7 +31,13 @@ namespace Altumo\Http;
 class OutgoingHttpRequest{
 
     protected $url = '';
+    //eg. http://www.google.com
+    
     protected $parameters = array();
+    //associative array of all of the URL parameters
+    
+    protected $message_body = null;  
+    //string of the http message body (if there is one)
     
     protected $anonymous = false;  
     //if true, uses the onion network to hide the request sender (you)
@@ -39,26 +45,26 @@ class OutgoingHttpRequest{
     protected $user_agent = null;  
     //if null, uses a random real world user agent for anonymous requests
     
-    protected $request_method = 'GET';  
+    protected $request_method = 'GET';
     //the http request method that will be used when the request is sent
     
-    protected $referrer = null;  
+    protected $referrer = null;
     //if not null, sets this string as the referrer for anonymous requests
     
-    protected $verify_ssl_peer = null;  
+    protected $verify_ssl_peer = null;
     //if not null, sets this boolean value to CURLOPT_SSL_VERIFYPEER
     
-    protected $cookie = null;  
+    protected $cookie = null;
     //if not null, sets this string to CURLOPT_COOKIE
     
-    protected $curl_info = array();  
+    protected $curl_info = array();
     //the values from curl_getinfo()
     
-    protected $cookie_filename = null;  
+    protected $cookie_filename = null;
     //filename of the cookie jar (the file where all the cookies are stored 
     //for this request)
     
-    protected $curl_handle = null;  
+    protected $curl_handle = null;
     //the resource to this curl object
     
     protected $ssl_cert_data = null;
@@ -73,11 +79,11 @@ class OutgoingHttpRequest{
     * All values passed in the parameters array will be url encoded.
     * 
     * @param string $url
-    * @param array $parameters
+    * @param array $url_parameters
     * @throws \Exception if the CURL library is not accessible.
     * @return OutgoingHttpRequest
     */
-    public function __construct( $url, $parameters = array() ){
+    public function __construct( $url, $url_parameters = array() ){
         
         //checks if CURL is loaded
             if( !extension_loaded('curl') ){               
@@ -85,8 +91,8 @@ class OutgoingHttpRequest{
             }
             
         //sets the parameters
-            if( !empty($parameters) ){
-                $this->setParameters($parameters);    
+            if( !empty($url_parameters) ){
+                $this->setParameters($url_parameters);    
             }
             
         //sets the url
@@ -112,14 +118,14 @@ class OutgoingHttpRequest{
             curl_setopt( $curl_handle, CURLOPT_RETURNTRANSFER, 1 );            
             if( $this->isPostRequest() ){
                 curl_setopt( $curl_handle, CURLOPT_POST, 1 );
-                curl_setopt( $curl_handle, CURLOPT_POSTFIELDS, $this->getParametersFormattedForPost() );
+                curl_setopt( $curl_handle, CURLOPT_POSTFIELDS, $this->getMessageBody() );
             }else{
                 curl_setopt( $curl_handle, CURLOPT_POST, 0 );
             }
             
             if( $this->isPutRequest() ){
                 curl_setopt( $curl_handle, CURLOPT_CUSTOMREQUEST, "PUT" );
-                $message_body = $this->getParametersFormattedForPost();
+                $message_body = $this->getMessageBody();
                 $temp_file = tmpfile();
                 fwrite($temp_file, $message_body);
                 fseek($temp_file, 0);
@@ -256,8 +262,6 @@ class OutgoingHttpRequest{
                 fclose($temp_file);
             }
             
-            
-            
             return $response;
                  
     }
@@ -278,17 +282,16 @@ class OutgoingHttpRequest{
     
     
     /**
-    * Sets all of the parameters for this request.
+    * Sets the URL parameters for this request.
     * This WILL REPLACE the any pre-existing parameters.
     * 
     * @param array $parameters
     */
     public function setParameters( $parameters ){
         
-        if( !is_array( $parameters ) && !is_string( $parameters ) ){
-            throw new \Exception('Parameters expects an array or a string.');
+        if( !is_array( $parameters ) ){
+            throw new \Exception('Parameters expects an array.');
         }
-        
         $this->parameters = $parameters;
         
     }
@@ -298,10 +301,27 @@ class OutgoingHttpRequest{
     * any parameters that have been set.
     * 
     * @param string $message_body
+    * @throws \Exception                    //if $message_body is not a string
     */
     public function setMessageBody( $message_body ){
         
-        $this->setParameters( $message_body );
+        if( !is_string($message_body) ){
+            throw new \Exception('Message body is expected to be a string.');
+        }
+        $this->message_body = $message_body;
+        
+    }
+    
+    
+    /**
+    * Getter for the message_body field on this OutgoingHttpRequest.
+    * Returns null if there is no message body.
+    * 
+    * @return string
+    */
+    public function getMessageBody(){
+    
+        return $this->message_body;
         
     }
     
@@ -317,21 +337,37 @@ class OutgoingHttpRequest{
         
     }
     
-    /**
-    * Get parameters formatted as required for POST requests.
-    * 
-    * @return string
-    */
-    public function getParametersFormattedForPost(){
-        $parameters = $this->getParameters();
         
-        if( is_array( $parameters ) ){
-            return http_build_query( $parameters );
-        } else {
-            return $parameters;
+    /**
+    * Determines if this request has get parameters.
+    * 
+    * @return boolean
+    */
+    public function hasParameters(){
+        
+        return !empty($this->parameters);
+        
+    }
+    
+    
+    /**
+    * Sets the message body to a urlencoded encoded string from the provided
+    * array.
+    * 
+    * @param array $post_parameters         //an associative array of parameters
+    *                                         that will be urlencoded and replace
+    *                                         the message body
+    * 
+    * @throws \Exception                    //if $post_parameters is not an array
+    */
+    public function setPostParameters( $post_parameters ){
+        
+        if( !is_array($post_parameters) ){
+            throw new \Exception('POST parameters must be an array.');
         }
         
-        return null;
+        $this->setMessageBody( http_build_query( $parameters ) );
+
     }
     
     
@@ -357,18 +393,6 @@ class OutgoingHttpRequest{
     public function getUrl(){
         
         return $this->url;
-        
-    }
-    
-    
-    /**
-    * Determines if this request has get parameters.
-    * 
-    * @return boolean
-    */
-    public function hasParameters(){
-        
-        return !empty($this->parameters);
         
     }
     
@@ -806,25 +830,29 @@ class OutgoingHttpRequest{
     * Closes the curl handle
     * 
     */
-    public function closeCurlHandle(){
+    protected function closeCurlHandle(){
+        
         if( !is_null($this->curl_handle) ){
             if( is_resource($this->curl_handle) ){
                 curl_close($this->curl_handle);
             }
             $this->curl_handle = null;
         }
+        
     }
     
     /**
     * Sets the SSL certificate to use for the request.
     * 
     * @param mixed $ssl_cert_data should be the contents of a PEM ssl certificate file.
-    * @returns OutgoingHttpRequest ($this)
+    * @returns OutgoingHttpRequest
     */
     public function setSslCertificateData( $ssl_cert_data ){
+        
         $this->ssl_cert_data = $ssl_cert_data;
         
         return $this;
+        
     }
     
     
@@ -832,7 +860,9 @@ class OutgoingHttpRequest{
     * Get the path to an SSL Cert file to use on the next request.
     **/
     public function getSslCertificateData(){
+        
         return $this->ssl_cert_data;
+        
     }
     
     /**
