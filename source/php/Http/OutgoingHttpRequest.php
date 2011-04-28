@@ -305,8 +305,8 @@ class OutgoingHttpRequest{
     */
     public function setMessageBody( $message_body ){
         
-        if( !is_string($message_body) ){
-            throw new \Exception('Message body is expected to be a string.');
+        if( !is_string($message_body) && !is_null($message_body) ){
+            throw new \Exception('Message body is expected to be a string or null.');
         }
         $this->message_body = $message_body;
         
@@ -487,7 +487,7 @@ class OutgoingHttpRequest{
         $agents[] = 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.5; en-US; rv:1.9.2.6) Gecko/20100625 Firefox/3.6.6';
         $agents[] = 'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; WOW64; Trident/4.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0)';
         $agents[] = 'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)';
-        return $agents[array_rand($agents)];
+        return $agents[ array_rand($agents) ];
         
     }
     
@@ -503,8 +503,8 @@ class OutgoingHttpRequest{
             return $this->getUrl();
         }else{
             return $this->getUrl() . '?' . http_build_query( $parameters );
-        }        
-            
+        }
+    
     }
     
     
