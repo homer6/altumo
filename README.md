@@ -20,7 +20,6 @@ Dependencies
      - Extensions:
        - CURL
        - mongodb client
-  - phpunit 3.5.11 (if you want to run unit tests)
   - "Altumo Packages" require mongodb 1.2+
   - Classes under the Symfony_1_4 directory depend on Symfony 1.4
 
@@ -28,16 +27,10 @@ Installation
 ------------
 
   - git clone git://github.com/homer6/altumo.git
-  - cd altumo
-  - git submodule update --init --recursive
 
 Testing
 ------------
 
-  - pear channel-discover pear.phpunit.de
-  - pear channel-discover components.ez.no
-  - pear channel-discover pear.symfony-project.com
-  - pear install phpunit/PHPUnit
   - ./test.sh
 
 
