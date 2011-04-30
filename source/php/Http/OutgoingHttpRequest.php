@@ -127,15 +127,23 @@ class OutgoingHttpRequest{
                 curl_setopt( $curl_handle, CURLOPT_CUSTOMREQUEST, "PUT" );
                 curl_setopt( $curl_handle, CURLOPT_PUT, 1 );
                 $message_body = $this->getMessageBody();
+                //$temp_file_name = tempnam( sys_get_temp_dir(), 'http_put_' );
+                //$temp_file = fopen($temp_file_name, 'w+');
                 $temp_file = tmpfile();
                 fwrite($temp_file, $message_body);
                 fseek($temp_file, 0);
                 curl_setopt( $curl_handle, CURLOPT_INFILE, $temp_file );
-                curl_setopt( $curl_handle, CURLOPT_INFILESIZE, strlen($message_body));
+                curl_setopt( $curl_handle, CURLOPT_INFILESIZE, strlen($message_body) );
+                //var_dump($message_body);
+                //curl_setopt( $curl_handle, CURLOPT_READFUNCTION, array( &$this, 'putReadFunctionCallback') );
             }
             
             if( $this->isDeleteRequest() ){
                 curl_setopt( $curl_handle, CURLOPT_CUSTOMREQUEST, "DELETE" );
+            }
+            
+            if( $this->isGetRequest() ){
+                //curl_setopt( $curl_handle, CURLOPT_CUSTOMREQUEST, false );
             }
             
             
@@ -252,8 +260,11 @@ class OutgoingHttpRequest{
             }
             
             //clean up the temp file, if this was a PUT
-                if( isset($temp_file) ){
-                    fclose($temp_file); //this also deletes the file                    
+                if( isset($temp_file_name) ){
+                    //fclose($temp_file);
+                    //unlink($temp_file_name);
+                    //unset($temp_file);
+                    //unset($temp_file_name);
                 }
             
             if( $response === false ){
@@ -266,6 +277,26 @@ class OutgoingHttpRequest{
             return $response;
                  
     }
+    
+    /**
+    * The read function for HTTP PUT calls.
+    * 
+    * @param resource $curl_handle
+    * @param string $filename
+    * @param integer $length
+    * 
+    * @see http://stackoverflow.com/questions/5619429/help-me-understand-curlopt-readfunction
+    * @return string
+    */
+    /*
+    protected function putReadFunctionCallback( $curl_handle, $filename, $length ){
+        
+        return $this->getMessageBody();
+        //return 'booo';
+        
+    }
+    */
+    
     
     /**
     * Sends the HTTP Request and returns the response as a HttpResponseMessage.
@@ -895,8 +926,8 @@ class OutgoingHttpRequest{
           
         $this->closeCurlHandle();
         if( file_exists($this->getCookieFilename()) ){
-            unlink( $this->getCookieFilename() );
-        }        
+            //unlink( $this->getCookieFilename() );
+        }
                
     }
     

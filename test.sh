@@ -15,4 +15,6 @@ if [ -z "$ALTUMO_TEST_SERVER" ]; then
     declare -x ALTUMO_TEST_SERVER="localhost"
 fi
 
-find $ALTUMO_TEST_ROOT -regex '^.*Test.*$' -exec phpunit --colors {} \;
+# find $ALTUMO_TEST_ROOT -regex '^.*Test.*$' -exec phpunit --colors {} \;
+
+`which php` source/php/Test/tests_boot.php

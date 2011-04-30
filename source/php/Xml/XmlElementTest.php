@@ -10,14 +10,29 @@
 */
 
 
-require_once( getenv('ALTUMO_TEST_ROOT') . '/loader.php' );
+//require_once( getenv('ALTUMO_TEST_ROOT') . '/loader.php' );
+
+namespace Altumo\Test;
 
 /**
 * Unit tests for the \Altumo\Xml\XmlElement class.
 * 
 */
-class XmlElementTest extends PHPUnit_Framework_TestCase{
-    
+class XmlElementTest extends \Altumo\Test\UnitTest{
+
+    protected $empty_xml_element = null;
+    protected $minimal_xml_element = null;
+
+    /**
+    * Set up for these tests
+    * 
+    */    
+    public function setup(){
+        
+        $this->empty_xml_element = new \Altumo\Xml\XmlElement();
+        $this->minimal_xml_element = new \Altumo\Xml\XmlElement( $this->getTestSuiteFileContents('minimal.xml') );
+        
+    }    
 
     /**
     * Tests basic parsing.
@@ -35,70 +50,45 @@ class XmlElementTest extends PHPUnit_Framework_TestCase{
         
     }
     
-    /**
-    * Provides an empty object (no arguments to contructor).
-    * 
-    * @return array
-    */
-    public function dataProviderEmptyObject(){
-        
-        return array( 
-                    array( new \Altumo\Xml\XmlElement() )                   
-        );
-        
-    }
     
     /**
     * Test that the object is not loaded when no parameters are passed to the constructor.
     * 
-    * @dataProvider dataProviderEmptyObject
-    * @param \Altumo\Xml\XmlElement $xml_element
     */
-    public function testIsNotLoadedOnEmptyContructor( $xml_element ){
-       
-        $this->assertFalse( $xml_element->isLoaded() );
+    public function testIsNotLoadedOnEmptyContructor(  ){
+        
+        $xml_element = $this->empty_xml_element;
+        
+        $this->assertTrue( $xml_element->isLoaded() === false );
         
     }
     
     /**
     * Test that the object throws and exception when assertLoaded is called.
     * 
-    * @dataProvider dataProviderEmptyObject
-    * @expectedException \Exception
-    * @param \Altumo\Xml\XmlElement $xml_element
     */
-    public function testAssertLoadedThrowsExceptionOnEmptyContructor( $xml_element ){
+    public function testAssertLoadedThrowsExceptionOnEmptyContructor(){
         
-        $xml_element->assertLoaded();
+        $xml_element = $this->empty_xml_element;
+        try{
+            $xml_element->assertLoaded();
+            $this->assertTrue( false );
+        }catch( \Exception $e ){
+            $this->assertTrue( true );
+        }
         
     }
-    
-    
-    /**
-    * Provides a minimally-size xml file for testing query elements.
-    * 
-    * @array
-    */
-    public function dataProviderMinimalElements(){
-        
-        
-        return array( 
-                    array( new \Altumo\Xml\XmlElement( $this->getTestSuiteFileContents('minimal.xml') ) )                   
-        );
-        
-    }
-    
     
     
     /**
     * Test the getName method.
     * 
-    * @dataProvider dataProviderMinimalElements
-    * @param \Altumo\Xml\XmlElement $xml_element
     */
-    public function testMethodGetName( $xml_element ){
+    public function testMethodGetName(){
         
-        $this->assertEquals( 'nutrition', $xml_element->getName() );
+        $xml_element = $this->minimal_xml_element;
+        
+        $this->assertTrue( 'nutrition' === $xml_element->getName() );
         
     }
     
@@ -106,16 +96,15 @@ class XmlElementTest extends PHPUnit_Framework_TestCase{
     /**
     * Test the queryWithXpath method.
     * 
-    * @dataProvider dataProviderMinimalElements
-    * @param \Altumo\Xml\XmlElement $xml_element
     */
-    public function testMethodQueryWithXpath( $xml_element ){
+    public function testMethodQueryWithXpath(){
         
+        $xml_element = $this->minimal_xml_element;
         $expected = array(
             "210",
             "510"
-        );        
-        $this->assertEquals( $expected, $xml_element->queryWithXpath('food/sodium') );
+        );
+        $this->assertTrue( $expected === $xml_element->queryWithXpath('food/sodium') );
         
     }
     
@@ -126,13 +115,12 @@ class XmlElementTest extends PHPUnit_Framework_TestCase{
     */
     public function testDocumentationSampleCode(){
         
-        $file_contents = file_get_contents( __DIR__ . '/test_data/minimal.xml' );
-        $xml_element = new \Altumo\Xml\XmlElement( $file_contents );
+        $xml_element = $this->minimal_xml_element;
         $expected = array(
             "210",
             "510"
         );
-        $this->assertEquals( $expected, $xml_element->queryWithXpath('food/sodium', \Altumo\Xml\XmlElement::RETURN_TYPE_STRING) );
+        $this->assertTrue( $expected === $xml_element->queryWithXpath('food/sodium', \Altumo\Xml\XmlElement::RETURN_TYPE_STRING) );
         
     }
     
