@@ -182,8 +182,10 @@ class PivotalTrackerPackage{
                 $project_ids[] = $project->id;
             }
             //add indexes
-            $project_collection->ensureIndex( array( $project_namespace . '.id', 1 ) );
-            $project_collection->ensureIndex( array( $project_namespace . '.name', 1 ) );
+                // TODO: Fix indexes. Remved due to unknown errors. 5/9/2011 : Steve & Juan
+                
+                //$project_collection->ensureIndex( array( $project_namespace . '.id', 1 ) );
+                //$project_collection->ensureIndex( array( $project_namespace . '.name', 1 ) );
         
         //get stories
             $story_collection = $this->getStoriesCollection();
