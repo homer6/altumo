@@ -58,10 +58,6 @@ class UnitTest{
         $exception = new \Exception();        
         $trace = $exception->getTrace();
         
-        //var_dump($trace);
-        // exit();
-        
-        array_shift($trace);
         $call = array_shift($trace);
         
         $filename = $call['file'];
