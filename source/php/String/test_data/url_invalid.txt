@@ -1,0 +1,10 @@
+/
+http://www.google.com /sfsa
+https://_api.herbalhealthnetwork.com/test-blank
+https://_herbalhealthnetwork.com/test-blank
+https:// herbalhealthnetwork.com/test-blank
+https://-------------.com/test-blank
+https://-------------.com/test-blank
+https://155.155.155.155./test-blank
+https://155.155.155.1554/test-blank?sfads
+

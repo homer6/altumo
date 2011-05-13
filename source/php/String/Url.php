@@ -19,6 +19,8 @@ namespace Altumo\String;
  * 
  * You can use it to parse, validate or build urls.
  * 
+ * It currently only partially supports the ftp, http and https schemes.
+ * 
  * eg.
  *   $url = 'http://username:password@hostname/path?arg=value#anchor';
  * 
@@ -54,7 +56,7 @@ class Url{
                 
         if( !is_null($full_url_string) ){
             if( is_string($full_url_string) ){
-                $this->setFullUrl($url);
+                $this->setFullUrl($full_url_string);
             }else{
                 throw new \Exception( 'Url must be a string if it\'s provided.' );
             }
@@ -98,11 +100,13 @@ class Url{
             if( $result === false ){
                 throw new \Exception( 'Malformed URL.' );
             }
-
+            
+            //\Altumo\Utils\Debug::dump($result);
+            
             if( array_key_exists('scheme', $result) && array_key_exists('host', $result) ){
                 $this->setScheme( $result['scheme'] );
                 $this->setHost( $result['host'] );
-            }else{
+            }else{                
                 throw new \Exception( 'Invalid URL. Both a schema and host are required.' );
             }
             
@@ -176,7 +180,7 @@ class Url{
     */
     public function setScheme( $scheme ){
     
-        if( is_string($scheme) ){
+        if( !is_string($scheme) ){
             throw new \Exception( 'The scheme must be a string.' );
         }
     
@@ -483,7 +487,22 @@ class Url{
     */
     public function setPath( $path ){
     
-        if( preg_match('#^(((([-$_\.+\*\!\'\(\),a-zA-Z0-9]|%[0-9A-Fa-f]{2})|[;:@&=])+)(\/((([-$_\.+\*\!\'\(\),a-zA-Z0-9]|%[0-9A-Fa-f]{2})|[;:@&=])+))*)$#', $path) ){
+        /**
+        * Changed from rfc 1738:
+        * 
+        *    '#^(((([-$_\.+\*\!\'\(\),a-zA-Z0-9]|%[0-9A-Fa-f]{2})|[;:@&=])+)(\/((([-$_\.+\*\!\'\(\),a-zA-Z0-9]|%[0-9A-Fa-f]{2})|[;:@&=])+))*)$#'
+        * 
+        * To: 
+        */
+        //  '#^/((((([-$_\\.+\\*\\!\'\\(\\),a-zA-Z0-9]|%[0-9A-Fa-f]{2})|[;:@&=])+)(\\/((([-$_\\.+\\*\\!\'\\(\\),a-zA-Z0-9]|%[0-9A-Fa-f]{2})|[;:@&=])+))*/?))?$#m'
+        /*
+        * 
+        * Because the RFC didn't support trailing slashes. Also, php's 
+        * parse_url includes the first / in the path.
+        * 
+        */
+        
+        if( preg_match('#^/((((([-$_\\.+\\*\\!\'\\(\\),a-zA-Z0-9]|%[0-9A-Fa-f]{2})|[;:@&=])+)(\\/((([-$_\\.+\\*\\!\'\\(\\),a-zA-Z0-9]|%[0-9A-Fa-f]{2})|[;:@&=])+))*/?))?$#m', $path) ){
             $this->path = $path;
         }else{
             throw new \Exception( 'Invalid path format.' );
@@ -701,6 +720,7 @@ class Url{
             I haven't implemented this one, it's newer
                        
             http://tools.ietf.org/html/rfc3986
+            Also, RFC 1738 (current) and RFC 1630 (not viewed).
             
 */
 

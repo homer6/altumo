@@ -46,7 +46,9 @@ class UnitTestResult{
         $this->setFilename( $filename );
         $this->setLineNumber( $line_number );
         $this->setResult( $result );
-        $this->setDescription( $description );
+        if( !is_null($description) ){
+            $this->setDescription( $description );
+        }
         
     }
     
@@ -146,6 +148,19 @@ class UnitTestResult{
         
     }
     
+    
+    /**
+    * Determines if this UnitTestResult has a description.
+    * 
+    * @return boolean
+    */
+    public function hasDescription(){
+    
+        return !is_null($this->description);
+        
+    }
+    
+    
     /**
     * Returns a line with the Result, Filename, Line Number and Description
     * 
@@ -172,9 +187,8 @@ class UnitTestResult{
         
         $summary .= $this->getFilename() . ':' . $this->getLineNumber();
         
-        $description = $this->getDescription();
-        if( $description !== null ){
-            $summary .= ' - ' . $description;
+        if( $this->hasDescription() ){
+            $summary .= ' - ' . $this->getDescription();
         }
         
         return $summary;

@@ -169,12 +169,12 @@ class TestSuite{
                 
             case \Altumo\Test\UnitTestResult::RESULT_FAILURE:
                 $this->counts['fail']++;
-                $this->output( "\n\t\tError: " . $result->getSummary() );
+                $this->output( "\n\t\t" . $result->getSummary() );
                 break;                
             
             case \Altumo\Test\UnitTestResult::RESULT_ERROR:
                 $this->counts['error']++;
-                $this->output( "\n\t\tError: " . $result->getSummary() );
+                $this->output( "\n\t\t" . $result->getSummary() );
                 break;
         };
         
