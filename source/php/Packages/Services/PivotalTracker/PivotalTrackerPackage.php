@@ -202,6 +202,11 @@ class PivotalTrackerPackage{
                     ), array( '$set' => array( 'description' => new \stdClass() ) ), true);
                     
                 
+                // If a single story is received, $stories is not an array. Make it so.
+                    if( !is_array( $stories ) ){
+                        $stories = array( $stories );
+                    }
+                
                 foreach( $stories as $story ){
                     
                     //store the story order (priority).  The story order is the same as the API result order.
