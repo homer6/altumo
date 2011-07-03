@@ -38,6 +38,8 @@ class Url{
     protected $password = null;
     protected $path = null;
     protected $query_string = null;         //after the question mark ?
+	protected $parameters = array();		//this is a duplicate of $query_string 
+	                                          //for easy access and manipulation
     protected $anchor = null;               //after the hashmark #
     
     protected $valid = false;               //whether this is a valid url
@@ -78,8 +80,12 @@ class Url{
         $password = null;
         $path = null;
         $query_string = null;
+        $parameters = array();
+        
+        $anchor = null;
 
         $valid = false;
+        $ip_host = false;
 
     }
     
@@ -537,6 +543,7 @@ class Url{
     
     /**
     * Setter for the query_string field on this Url.
+	* This will replace all of the current parameters as well.
     * 
     * @param string $query_string
     * @throws \Exception                    //if this query_string is invalid
@@ -544,7 +551,16 @@ class Url{
     public function setQueryString( $query_string ){
     
         if( preg_match('#^((([-$_\.+\*\!\'\(\),a-zA-Z0-9]|%[0-9A-Fa-f]{2})|[;:@&=])+)$#', $query_string) ){
+            
             $this->query_string = $query_string;
+            
+            //populate the parameters array 
+			    $parameters = explode( '&', $query_string );
+			    foreach( $parameters as $parameter ){
+				    $parameter_parts = explode( '=', $parameter );
+				    $this->setParameter( urldecode(reset($parameter_parts)), urldecode(end($parameter_parts)) );
+			    }
+                
         }else{
             throw new \Exception( 'Invalid query string format.' );
         }
@@ -654,11 +670,108 @@ class Url{
             $url_string .= $this->getLogin() . '@';
         }
         $url_string .= $this->getHostPort();
+        if( $this->hasParameters() ){
+            $url_string .= '?' . \Altumo\String\String::generateUrlParameterString( $this->getParameters() );
+        }
+        if( $this->hasAnchor() ){
+            $url_string .= '#' . urlencode($this->getAnchor());
+        }
         
-        
-        
+        return $url_string;
         
     }
+
+    
+    /**
+    * Setter for the parameters field on this wfUrl.
+    * 
+    * @param array $parameters
+    */
+    public function setParameters( $parameters ){
+    
+        $this->parameters = $parameters;
+        
+    }
+    
+    
+    /**
+    * Getter for the parameters field on this Url.
+    * 
+    * @return array
+    */
+    public function getParameters(){
+    
+        return $this->parameters;
+        
+    }
+    
+    
+    /**
+    * Determines if this Url has any parameters.
+    * 
+    * @return array
+    */
+    public function hasParameters(){
+    
+        return !empty($this->parameters);
+        
+    }
+	
+            
+    /**
+    * Sets a single parameter field by name.
+    * Returns null if it doesn't exist.
+    * 
+    * @param string $parameter_name
+    * @param string $value
+    * @throws \Exception if $parameter_name or $value are not strings
+    * @return string
+    */
+    public function setParameter( $parameter_name, $value ){
+    
+        if( !is_string($parameter_name) || !is_string($parameter_name) ){
+            throw new wfException('Parameter name and value must both be strings.');
+        }
+        $this->parameters[$parameter_name] = $value;
+        
+    }
+    
+	
+    /**
+    * Gets a single parameter field by name.
+    * Returns null if it doesn't exist.
+    * 
+    * @param string $parameter_name
+    * @return string
+    */
+    public function getParameter( $parameter_name ){
+    
+        if( array_key_exists( $parameter_name, $this->parameters ) ){
+            return $this->parameters[$parameter_name];
+        }else{
+            return null;
+        }
+        
+    }
+    
+    /**
+    * Returns a block of php code (as a string) that can be used to modify this array.
+    * Useful in reconstructing HTTP requests.
+    * 
+    * @return string
+    */
+    public function getParameterSetters(){
+        
+        $block = '';
+        foreach( $this->getParameters() as $name => $value ){
+            
+            $block .= '$parameters[\'' . $name . '\'] = \'' . $value . '\';' . "\n";
+            
+        }
+        return $block;
+        
+    }
+
     
     
 }
