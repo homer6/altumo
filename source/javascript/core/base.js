@@ -11,22 +11,23 @@
 /**
  * @fileoverview Bootstrap for the Altumo JS Linbrary
  *
- * base.js initialized the alt.* global namespace and initializes Altumo by
+ * base.js initializes the alt.* global namespace and loads Altumo by
  * calling the alt.load() class function.
  */
  
-goog.provide( 'alt' );
-goog.provide( 'alt.Config' );
-goog.provide( 'alt.Config.routing' );
-goog.provide( 'alt.widget' );
+// Provides
+    goog.provide( 'alt' );
 
-goog.require( 'goog.dom' );
+// Requires
+    goog.require( 'alt.Config' );
+
 
 /**
 * 
 */
-var a = function(title, content, noteContainer) {
-  this.title = title;
-  this.content = content;
-  this.parent = noteContainer;
-};
+alt.load = function( options ){
+    
+    
+    
+}
+
