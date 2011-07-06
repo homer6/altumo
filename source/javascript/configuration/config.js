@@ -20,7 +20,6 @@
 
 // Requires
     goog.require( 'alt' );
-    goog.require( 'goog.storage.Storage' );
 
 /**
  * Provides configuration storage for routing and other global applaication
@@ -28,18 +27,20 @@
  *
  * @constructor
  **/
+alt.configuration = alt.configuration || {};
 
 alt.configuration.Config = function(){
-    goog.base( this );
+    //goog.base( this );
     
     this.routingTable = {};
 };
 
-goog.inherits( alt.configuration.Config, goog.storage.Storage );
 
 /**
 * Load all routes into the configuration
-* All routes are automaticall
+* All routes are automatically
+* 
+* @param Array routes
 */
 alt.configuration.Config.prototype.loadRoutes = function( routes ){
     
@@ -47,8 +48,35 @@ alt.configuration.Config.prototype.loadRoutes = function( routes ){
     
     $.each( routes, function( route_key, route ){
         
-        me.routingStorage.set( route_key, route );
+        me.addRoute( route_key, route );
         
     });
+    
+};
+
+
+/**
+* Add a route to the routing table.
+* 
+* @param string route_key       // Unique route key
+* @param string route           // Route
+*/
+alt.configuration.Config.prototype.addRoute = function( route_key, route ){
+    
+    this.routingTable[ route_key ] = route;
+    
+};
+
+
+/**
+* Add a route to the routing table.
+* 
+* @param string route_key       // Unique route key
+* 
+* @return string
+*/
+alt.configuration.Config.prototype.getRoute = function( route_key ){
+    
+    return this.routingTable[ route_key ] || null;
     
 };

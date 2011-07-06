@@ -19,7 +19,7 @@
     goog.provide( 'alt' );
 
 // Requires
-    goog.require( 'alt.Config' );
+    goog.require( 'alt.configuration.Config' );
 
 
 /**
@@ -27,7 +27,6 @@
 */
 alt.load = function( options ){
     
+    alt.Config = new alt.configuration.Config( options.routes );
     
-    
-}
-
+};
