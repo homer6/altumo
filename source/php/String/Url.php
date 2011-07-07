@@ -670,8 +670,9 @@ class Url{
             $url_string .= $this->getLogin() . '@';
         }
         $url_string .= $this->getHostPort();
+        $url_string .= $this->getPath();        
         if( $this->hasParameters() ){
-            $url_string .= '?' . \Altumo\String\String::generateUrlParameterString( $this->getParameters() );
+            $url_string .= \Altumo\String\String::generateUrlParameterString( $this->getParameters() );
         }
         if( $this->hasAnchor() ){
             $url_string .= '#' . urlencode($this->getAnchor());
@@ -725,7 +726,6 @@ class Url{
     * @param string $parameter_name
     * @param string $value
     * @throws \Exception if $parameter_name or $value are not strings
-    * @return string
     */
     public function setParameter( $parameter_name, $value ){
     
@@ -736,6 +736,23 @@ class Url{
         
     }
     
+    
+    /**
+    * Alias for ::setParameter()
+    * 
+    * Sets a single parameter field by name.
+    * Returns null if it doesn't exist.
+    * 
+    * @param string $parameter_name
+    * @param string $value
+    * @throws \Exception if $parameter_name or $value are not strings
+    */
+    public function addParameter( $parameter_name, $value ){
+        
+        $this->setParameter( $parameter_name, $value );
+        
+    }
+        
 	
     /**
     * Gets a single parameter field by name.
@@ -754,9 +771,12 @@ class Url{
         
     }
     
+    
     /**
     * Returns a block of php code (as a string) that can be used to modify this array.
     * Useful in reconstructing HTTP requests.
+    * 
+    * eg. Firebug -> Net Tab -> Make an HTTP POST -> Right-click -> Copy Location with Parameters
     * 
     * @return string
     */
@@ -772,6 +792,24 @@ class Url{
         
     }
 
+    
+    /**
+    * Gets the current scheme and host for this website.
+    * 
+    * eg.
+    *   https://domain.com
+    * 
+    * @return string
+    */
+    static public function getCurrentSchemeAndHost(){
+        
+        if( array_key_exists('HTTPS',$_SERVER) && $_SERVER['HTTPS'] === 'on' ){
+            return 'https://' . $_SERVER['HTTP_HOST'];
+        }else{
+            return 'http://' . $_SERVER['HTTP_HOST'];
+        }
+        
+    }
     
     
 }

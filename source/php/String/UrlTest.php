@@ -78,6 +78,28 @@ class UrlTest extends \Altumo\Test\UnitTest{
     
     
     /**
+    * Tests the getUrl method
+    * 
+    */
+    public function testGetUrlMethod(){
+                       
+        $url = new \Altumo\String\Url( 'http://www.domain.com/asdfsadf/fsadf/fasfd/fsdasda-safsd?safdsa=cow&meow=dog' );
+                               
+        $this->assertTrue( $url->getUrl() === 'http://www.domain.com/asdfsadf/fsadf/fasfd/fsdasda-safsd?safdsa=cow&meow=dog' );
+        
+        $url->setPath( '/hello' );
+        
+        $this->assertTrue( $url->getUrl() === 'http://www.domain.com/hello?safdsa=cow&meow=dog' );
+        
+        $url->setAnchor( 'whats_up' );
+        
+        $this->assertTrue( $url->getUrl() === 'http://www.domain.com/hello?safdsa=cow&meow=dog#whats_up' );
+        
+
+    }
+    
+    
+    /**
     * Read each line in the test suite files: 
     *   test_data/url_valid.txt 
     *   test_data/url_invalid.txt 
