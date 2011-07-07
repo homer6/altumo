@@ -23,10 +23,17 @@
 
 
 /**
+* Initializes all the core components of the Altumo library
 * 
+* @param Object options
+*       // Options:
+*           - routes      // A list of routes indexed by route key.
 */
 alt.load = function( options ){
-    
-    alt.Config = new alt.configuration.Config( options.routes );
-    
+
+    // Create config object
+        alt.Config = new alt.configuration.Config();
+
+    // Load Routing table
+        alt.Config.Router.loadRoutes( options.routes );
 };
