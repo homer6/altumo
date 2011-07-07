@@ -15,21 +15,24 @@
  */
  
 // Provides
-    goog.provide( 'alt.routing.Router' );
+    goog.provide( 'altumo.routing.Router' );
 
 // Requires
     //goog.require( 'alt' );
 
 
 
-alt.routing = alt.routing || {};
+altumo.routing = altumo.routing || {};
 
 /**
  * Provides route-key to route resolution for client side widgets.
  *
  * @constructor
+ * 
+ * @param options
+ *      - routes: Map of routes pre-load.
  **/
-alt.routing.Router = function(){
+altumo.routing.Router = function( options ){
 
     // Data storage
         this._routingTable = {};
@@ -37,6 +40,11 @@ alt.routing.Router = function(){
 
     // Configuration
         this.validRouteRegex = /^[a-zA-Z0-9_-]+$/m;
+    
+    // Load routes if provided
+        if( options.routes ){
+            this.loadRoutes( options.routes );
+        }
 
 };
 
@@ -46,14 +54,13 @@ alt.routing.Router = function(){
 * 
 * @param Array routes
 */
-alt.routing.Router.prototype.loadRoutes = function( routes ){
+altumo.routing.Router.prototype.loadRoutes = function( routes ){
     me = this;
-
+    
     $.each( routes, function( route_key, route ){
-
         me.addRoute( route_key, route );
-        
     }); 
+    
 };
 
 
@@ -63,7 +70,7 @@ alt.routing.Router.prototype.loadRoutes = function( routes ){
 * @param string route_key       // Unique route key
 * @param string route           // Route
 */
-alt.routing.Router.prototype.addRoute = function( route_key, route ){
+altumo.routing.Router.prototype.addRoute = function( route_key, route ){
 
     this.validateRouteKey( route_key, true );
     
@@ -82,7 +89,7 @@ alt.routing.Router.prototype.addRoute = function( route_key, route ){
 * 
 * @throws Exception             // If the key is invalid or non-existant
 */
-alt.routing.Router.prototype.getRouteByKey = function( route_key ){
+altumo.routing.Router.prototype.getRouteByKey = function( route_key ){
     
     if( !this.validateRouteKey( route_key, true ) );
     
@@ -92,7 +99,7 @@ alt.routing.Router.prototype.getRouteByKey = function( route_key ){
         
     } else {
         
-        throw new Exception( 'Invalud route key ' + route_key );
+        throw 'Invalid route key ' + route_key;
         
     }
 
@@ -118,7 +125,7 @@ alt.routing.Router.prototype.getRouteByKey = function( route_key ){
 * @returns string               // the URL being requested
 * @throws Exception             // If an invalid route_key is given.
 */
-alt.routing.Router.prototype.getUrl = function( expression ){
+altumo.routing.Router.prototype.getUrl = function( expression ){
     
     if( expression.indexOf( '@' ) === 0 ){
         var route_key = expression.substring( 1 );
@@ -144,7 +151,7 @@ alt.routing.Router.prototype.getUrl = function( expression ){
 * @param throw_on_invalid [false]   // throw an exception if the key is not valid
 * @return bool                      // true on valid, false on invalid
 */
-alt.routing.Router.prototype.validateRouteKey = function( route_key, throw_on_invalid ){
+altumo.routing.Router.prototype.validateRouteKey = function( route_key, throw_on_invalid ){
     
     throw_on_invalid = throw_on_invalid || false;
     

@@ -15,11 +15,13 @@
  */
  
 // Provides
-    goog.provide( 'alt.configuration.Config' );
+    goog.provide( 'altumo.configuration.Config' );
 
 // Requires
-    //goog.require( 'alt' );
-    goog.require( 'alt.routing.Router' );
+    //goog.require( 'altumo' );
+
+
+altumo.configuration = altumo.configuration || {};
 
 
 /**
@@ -28,11 +30,26 @@
  *
  * @constructor
  **/
-alt.configuration = alt.configuration || {};
-
-alt.configuration.Config = function(){
+altumo.configuration.Config = function(){
     
-    // Internal namespaces
-        this.Router = new alt.routing.Router();
+    // Data storage
+        this._config = {};
+
+};
+
+
+/**
+* Get a config setting
+* 
+*/
+altumo.configuration.Config.prototype.get = function( setting_key, default_return ){
+
+};
+
+/**
+* Get a config setting
+* 
+*/
+altumo.configuration.Config.prototype.set = function( setting_key, value ){
 
 };

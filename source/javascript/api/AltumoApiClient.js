@@ -9,28 +9,29 @@
 */
 
 /**
- * @fileoverview Config handler for the Altumo Library.
- * 
- * Keeps global configuration items including routing.
+ * @fileoverview Base API Client
+
  */
  
 // Provides
-    goog.provide( 'alt.api' );
-    goog.provide( 'alt.api.AltumoApiClient' );
+    goog.provide( 'altumo.api' );
+    goog.provide( 'altumo.api.AltumoApiClient' );
 
 // Requires
     //goog.require( 'alt' );
 
 
 /**
- * Provides configuration storage for routing and other global applaication
- * settings.
+ * Provides a base Altumo API client side library.
+ * 
+ * This Class is to be extended by each Widget to implement
+ * specific functionallity.
  *
  * @constructor
  **/
-alt.api = alt.api || {};
+altumo.api = altumo.api || {};
 
-alt.api.AltumoApiClient = function(){
+altumo.api.AltumoApiClient = function(){
 
 
 };
@@ -58,11 +59,11 @@ alt.api.AltumoApiClient = function(){
 * @throws Exception                 // if an invalid route-key is given as the
 *                                   // route to be used.
 */
-alt.api.AltumoApiClient.prototype.sendRequest = function( route, http_method, headers, parameters, request_body, callback, errorCallback ){
+altumo.api.AltumoApiClient.prototype.sendRequest = function( route, http_method, headers, parameters, request_body, callback, errorCallback ){
     me = this;
 
     // Get url to call
-        var url = alt.Config.Router.getUrl( route );
+        var url = alt.router.getUrl( route );
     
     // Validate http_method
         http_method = http_method.match(/^(GET|POST|PUT|DELETE)$/m)
@@ -76,7 +77,7 @@ alt.api.AltumoApiClient.prototype.sendRequest = function( route, http_method, he
         request_body = JSON.stringify( request_body, null, '' );
         
     // Use default error callback if none provided
-        errorCallback = errorCallback || alt.api.AltumoApiClient.prototype.handleErrorArray;
+        errorCallback = errorCallback || altumo.api.AltumoApiClient.prototype.handleErrorArray;
         
 
     $.ajax( url, {
@@ -147,7 +148,7 @@ alt.api.AltumoApiClient.prototype.sendRequest = function( route, http_method, he
 * 
 * @return void
 */
-alt.api.AltumoApiClient.prototype.handleSuccessfulResponse = function( data, textStatus, jqXHR, callback, errorCallback ){
+altumo.api.AltumoApiClient.prototype.handleSuccessfulResponse = function( data, textStatus, jqXHR, callback, errorCallback ){
     
     if( data.errors && data.errors.length ){
         errorCallback( data.errors );
@@ -190,7 +191,7 @@ alt.api.AltumoApiClient.prototype.handleSuccessfulResponse = function( data, tex
 * 
 * @return void
 */
-alt.api.AltumoApiClient.prototype.handleErroneousResponse = function( jqXHR, textStatus, errorThrown, errorCallback ){
+altumo.api.AltumoApiClient.prototype.handleErroneousResponse = function( jqXHR, textStatus, errorThrown, errorCallback ){
 
     var errors = [];
     
@@ -214,7 +215,7 @@ alt.api.AltumoApiClient.prototype.handleErroneousResponse = function( jqXHR, tex
 * 
 * @return void
 */
-alt.api.AltumoApiClient.prototype.handleErrorArray = function( errors ){
+altumo.api.AltumoApiClient.prototype.handleErrorArray = function( errors ){
 
     $.each( errors, function( index, error ){
         alert( error );
@@ -229,7 +230,7 @@ alt.api.AltumoApiClient.prototype.handleErrorArray = function( errors ){
 
 /** Sample request code.
 
-var api_client = new alt.api.AltumoApiClient();
+var api_client = new altumo.api.AltumoApiClient();
 
 
 api_client.sendRequest( 
