@@ -1,8 +1,8 @@
 /
 http://www.google.com /sfsa
-https://_api.herbalhealthnetwork.com/test-blank
-https://_herbalhealthnetwork.com/test-blank
-https:// herbalhealthnetwork.com/test-blank
+https://_api.google.com/test-blank
+https://_google.com/test-blank
+https:// google.com/test-blank
 https://-------------.com/test-blank
 https://-------------.com/test-blank
 https://155.155.155.155./test-blank

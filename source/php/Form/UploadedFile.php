@@ -346,10 +346,10 @@ class UploadedFile{
                     foreach( $files as $file ){
                         
                         if( !array_key_exists( 'tmp_name', $_FILES[$form] ) ){
-                            throw new wfException('GetFiles does not support third level form names.');
+                            throw new \Exception('GetFiles does not support third level form names.');
                         }                    
                         if( is_array($_FILES[$form]['tmp_name'][$file]) ){
-                            throw new wfException('GetFiles does not support third level form names.');
+                            throw new \Exception('GetFiles does not support third level form names.');
                         }
                         
                             

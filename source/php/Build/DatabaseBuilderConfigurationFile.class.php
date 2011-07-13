@@ -49,7 +49,7 @@ class DatabaseBuilderConfigurationFile extends \Altumo\Xml\XmlFile{
     */
     protected function getDefaultEmptyFile(){
         
-        $xml_template = new wfXmlElement('<DatabaseBuilderConfiguration/>');
+        $xml_template = new \Altumo\Xml\XmlElement('<DatabaseBuilderConfiguration/>');
             $settings = $xml_template->addChild('Settings');
                 $settings->addChild( 'DropOnNewSnapshot', 'false' );
             $database = $xml_template->addChild('Database');

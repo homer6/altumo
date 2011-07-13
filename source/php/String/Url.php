@@ -684,7 +684,7 @@ class Url{
 
     
     /**
-    * Setter for the parameters field on this wfUrl.
+    * Setter for the parameters field on this Url.
     * 
     * @param array $parameters
     */
@@ -730,7 +730,7 @@ class Url{
     public function setParameter( $parameter_name, $value ){
     
         if( !is_string($parameter_name) || !is_string($parameter_name) ){
-            throw new wfException('Parameter name and value must both be strings.');
+            throw new \Exception('Parameter name and value must both be strings.');
         }
         $this->parameters[$parameter_name] = $value;
         

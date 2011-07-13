@@ -29,7 +29,7 @@ class DatabaseBuildLogFile extends \Altumo\Xml\XmlFile{
     * @param boolean $readonly              //whether this \Altumo\Xml\XmlFile 
     *                                         is going to be used as a readonly
     *                                         object (doesn't write to xml file)
-    * @throws wfException                   //if file or directory is not 
+    * @throws \Exception                   //if file or directory is not 
     *                                         writable
     * @return \Altumo\Xml\XmlFile
     */

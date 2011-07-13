@@ -235,7 +235,6 @@ var api_client = new altumo.api.AltumoApiClient();
 
 api_client.sendRequest( 
     '@api_list_users', 
-    //'https://api.hhdev.net/organization/',
     'PUT', 
     { "Authorization": "Basic czEPgiRdcAPIedJGOpMFbNwyuDKkzCqP", "X-API-Version":"1.0" },
     { "page_size":"30" }, 
