@@ -42,8 +42,8 @@ USAGE;
                 $xml_builder_configuration = new DatabaseBuilderConfigurationFile( $default_builder_configuration_file );
                 $xml_builder_configuration->setDatabaseDirectory( $database_dir );
                 
-                $database_builder = new DatabaseBuilder( $xml_builder_configuration, $xml_build_sequence, $xml_build_log );
-            }        
+                $database_builder = new \Altumo\Build\DatabaseBuilder( $xml_builder_configuration, $xml_build_sequence, $xml_build_log );
+            }
                 
         switch( $command ){
             

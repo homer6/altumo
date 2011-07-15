@@ -15,6 +15,7 @@ namespace Altumo\Test;
 /**
 * Unit tests for the \Altumo\String\Url class.
 * 
+* @author Steve Sperandeo <steve.sperandeo@altumo.com>
 */
 class UrlTest extends \Altumo\Test\UnitTest{
 

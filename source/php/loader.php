@@ -22,6 +22,8 @@
 * Also, you can register your own namespaces by adding a second value to the
 * registerNamespaces array argument. See the comments within the 
 * UniversalClassLoader for addition sample usages.
+* 
+* @author Steve Sperandeo <steve.sperandeo@altumo.com>
 */
   
     //set default timezone

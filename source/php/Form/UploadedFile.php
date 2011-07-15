@@ -9,11 +9,9 @@
 * file that was distributed with this source code.
 */
 
-
-
-
 namespace Altumo\Form;
  
+
  
 /**
 * This class represents an uploaded file that hasn't been moved.
