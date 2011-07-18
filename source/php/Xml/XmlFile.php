@@ -11,7 +11,6 @@
 
 
 
-
 namespace Altumo\Xml;
 
 require_once __DIR__ . '/XmlElement.php';
@@ -20,7 +19,10 @@ require_once __DIR__ . '/XmlElement.php';
 /**
 * An instance of this class represents an xml file on the filesystem.
 * It is designed to be extended.
-* @see DatabaseBuildSequenceFile 
+* 
+* For an example of how to extend it, 
+* @see \sfAltumoPlugin\Build\DatabaseBuildSequenceFile in 
+*       https://github.com/homer6/sfAltumoPlugin
 * 
 * @author Steve Sperandeo <steve.sperandeo@altumo.com>
 */
