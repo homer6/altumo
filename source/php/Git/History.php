@@ -23,7 +23,14 @@ class History{
 
     /**
     * Gets the last commit as an array.
-    * The SHA1 is the array key and the value is a string with the comments of the commit (on one line)
+    * The SHA1 is the array key and the value is a string with the comments of
+    * the commit (on one line).
+    * 
+    *    returned array looks like this:
+    *      array(1) {
+    *         ["7b8e0cee0a58f05ef9e48e6daabfa07c3ebe728d"]=>
+    *         string(34) "Fixed bug in Not interested button"
+    *      }
     * 
     * @return array
     */
@@ -46,7 +53,8 @@ class History{
         
         //get the revision log        
             $last_commit = self::getLastCommit();
-            return reset(array_keys($last_commit));
+            $commit_hashes = array_keys( $last_commit );
+            return reset( $commit_hashes );
         
     }    
 
