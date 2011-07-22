@@ -31,7 +31,8 @@ class Booleans{
     * @param mixed $value
     * 
     * @return boolean                       //the value that it interpreted
-    * @throw \Exception                     //if 
+    * @throw \Exception                     //if could not be interpreted as 
+    *                                         boolean
     */
     static public function assertLooseBoolean( $value ){
         
