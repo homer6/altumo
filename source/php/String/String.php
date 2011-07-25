@@ -217,6 +217,49 @@ class String{
     }
     
     
+    /**
+    * Tries to interpret a string value as boolean.
+    * 
+    * truthy expressions:
+    *   - true
+    *   - y
+    *   - yes
+    *   - 1
+    *   - t
+    * 
+    * falsy expressions
+    *   - false
+    *   - n
+    *   - no
+    *   - 0
+    *   - f
+    * 
+    * Expressions are evaluated case insensitively.
+    * 
+    * 
+    * @param string $text
+    * 
+    * @return bool
+    */
+    static public function convertToBoolean( $text ){
+        
+        if( is_bool( $text ) ) return $text; 
+        
+        $true = array( 'true', 'y', 'yes', '1', 't' );
+        $false = array( 'false', 'n', 'no', '0', 'f' );
+        
+        $text = strtolower( trim( $text ) );
+        
+        if( in_array( $text, $true ) ) {
+            return true;
+        } elseif( in_array( $text, $false ) ) {
+            return false;
+        }
+        
+        return (bool)$text;
+    }
+    
+    
 }
 
 
