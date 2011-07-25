@@ -22,7 +22,7 @@ namespace Altumo\Utils;
 * 
 * @author Steve Sperandeo <steve.sperandeo@altumo.com>
 */
-class Date extends sfDate{
+class Date extends \sfDate{
     
     protected $time_zone = null;
     
