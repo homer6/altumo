@@ -347,11 +347,11 @@ abstract class XmlFile{
 
         $this->assertFileOpen();
         $this->assertFileWritable();
-        $file_contents = $this->getXmlRoot()->getXmlAsString(true);                    
+        $file_contents = $this->getXmlRoot()->getXmlAsString(true);
+        $file_pointer = $this->getFilePointer();
+        ftruncate( $file_pointer, 0 );
+        rewind( $file_pointer );
         fwrite( $this->getFilePointer(), $file_contents );
-        fclose( $this->getFilePointer() );
-        $this->setFilePointer( fopen( $this->getFilename(), 'w+' ) );
-        $this->setFileContents( $file_contents );
 
     }
     
