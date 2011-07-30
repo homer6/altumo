@@ -109,6 +109,7 @@ abstract class XmlFile{
                     if( empty($file_contents) ){
                         $file_contents = $this->getDefaultEmptyFile();
                     }
+                    $this->filename = $filename;
                     $file_pointer = fopen( $filename, 'r' );
                     $this->setFileContents( $file_contents );
                     $this->setXmlRoot( new \Altumo\Xml\XmlElement($file_contents) );
@@ -123,7 +124,7 @@ abstract class XmlFile{
                 
             }
             
-            umask($existing_umask);
+            umask($existing_umask);            
             
         }catch( Exception $e ){
             $this->closeFile(false);
@@ -312,7 +313,9 @@ abstract class XmlFile{
     /**
     * Closes this file, if it's open
     * 
-    * @param boolean $write //whether this method should write the contents before closing.  Defaults to yes.
+    * @param boolean $write                 //whether this method should write 
+    *                                         the contents before closing.  
+    *                                         Defaults to yes.
     * @return boolean
     */
     public function closeFile( $write = true ){
@@ -329,10 +332,9 @@ abstract class XmlFile{
                 }else{
                     //restores the existing contents
                     $file_contents = $this->getFileContents();                    
-                }
-                if( !empty($file_contents) ){
-                    fwrite( $this->getFilePointer(), $file_contents );
-                }
+                }                
+                fwrite( $this->getFilePointer(), $file_contents );
+                fclose( $this->getFilePointer() );
                 
             }
             
@@ -341,12 +343,15 @@ abstract class XmlFile{
             $this->file_contents = null;
             $this->xml_root = null;
             $this->read_only = null;
+            
         }
         
     }
     
+    
     /**
-    * Closes the file when the object is destroy.
+    * Closes the file when the object is destroyed (this will write to the file
+    * which is the desired behavior).
     * 
     */
     public function __destruct(){
