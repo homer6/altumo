@@ -309,35 +309,25 @@ abstract class XmlFile{
     }
     
     
+        
+    
     
     /**
-    * Closes this file, if it's open
+    * Closes this file, if it's open. This will write to it by default.
     * 
     * @param boolean $write                 //whether this method should write 
     *                                         the contents before closing.  
     *                                         Defaults to yes.
-    * @return boolean
     */
     public function closeFile( $write = true ){
         
         if( $this->isFileOpen() ){
             
-            if( $this->isReadOnly() ){
-                fclose( $this->getFilePointer() );
-            }else{
-                
-                if( $write ){
-                    //writes the new contents
-                    $file_contents = $this->getXmlRoot()->getXmlAsString(true);                    
-                }else{
-                    //restores the existing contents
-                    $file_contents = $this->getFileContents();                    
-                }                
-                fwrite( $this->getFilePointer(), $file_contents );
-                fclose( $this->getFilePointer() );
-                
+            if( !$this->isReadOnly() ){
+                $this->writeToFile();
             }
             
+            fclose( $this->getFilePointer() ); 
             $this->filename = null;            
             $this->file_pointer = null;
             $this->file_contents = null;
@@ -346,6 +336,23 @@ abstract class XmlFile{
             
         }
         
+    }
+    
+    
+    /**
+    * Saves the contents to the file.
+    * 
+    */
+    public function writeToFile(){
+
+        $this->assertFileOpen();
+        $this->assertFileWritable();
+        $file_contents = $this->getXmlRoot()->getXmlAsString(true);                    
+        fwrite( $this->getFilePointer(), $file_contents );
+        fclose( $this->getFilePointer() );
+        $this->setFilePointer( fopen( $this->getFilename(), 'w+' ) );
+        $this->setFileContents( $file_contents );
+
     }
     
     
