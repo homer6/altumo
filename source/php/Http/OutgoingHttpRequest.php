@@ -4,6 +4,7 @@
 * This file is part of the Altumo library.
 * 
 * (c) Steve Sperandeo <steve.sperandeo@altumo.com>
+* (c) Juan Jaramillo <juan.jaramillo@altumo.com>
 *
 * For the full copyright and license information, please view the LICENSE
 * file that was distributed with this source code.
@@ -13,7 +14,8 @@
 
 
 namespace Altumo\Http;
- 
+
+
 /**
 * This is an HTTP Client class.
 * 
@@ -74,6 +76,7 @@ class OutgoingHttpRequest{
     const HTTP_METHOD_PUT = 'PUT';
     const HTTP_METHOD_DELETE = 'DELETE';
         
+        
     /**
     * Contstructor for this Curl Request
     * All values passed in the parameters array will be url encoded.
@@ -99,6 +102,7 @@ class OutgoingHttpRequest{
             $this->setUrl( $url );
         
     }
+    
     
     /**
     * Sends the HTTP Request and returns the response as a string.
@@ -278,6 +282,7 @@ class OutgoingHttpRequest{
                  
     }
     
+    
     /**
     * The read function for HTTP PUT calls.
     * 
@@ -327,6 +332,7 @@ class OutgoingHttpRequest{
         $this->parameters = $parameters;
         
     }
+    
     
     /**
     * Sets the message body for POST, PUT or DELETE requests. This will replace
@@ -416,6 +422,7 @@ class OutgoingHttpRequest{
         $this->url = $url;
         
     }
+    
     
     /**
     * Gets the URL for this request. (without the get parameters)
@@ -523,6 +530,7 @@ class OutgoingHttpRequest{
         
     }
     
+    
     /**
     * Gets the url with the combined url-encoded get parameters.
     * 
@@ -621,8 +629,7 @@ class OutgoingHttpRequest{
         return ( $this->getRequestMethod() === OutgoingHttpRequest::HTTP_METHOD_DELETE );
         
     }
-    
-    
+        
     
     /**
     * Setter for the referrer field on this OutgoingHttpRequest.
@@ -646,6 +653,7 @@ class OutgoingHttpRequest{
         return $this->referrer;
         
     }
+        
         
     /**
     * Determines if this Referrer has been set.
@@ -734,6 +742,7 @@ class OutgoingHttpRequest{
         
     }
     
+    
     /**
     * Setter for the headers field on this OutgoingHttpRequest.
     * 
@@ -757,6 +766,7 @@ class OutgoingHttpRequest{
         
     }
     
+    
     /**
     * Gets the headers in an array suitable to be passed into CURL (non-associative array)
     * 
@@ -772,6 +782,7 @@ class OutgoingHttpRequest{
         
     }
     
+    
     /**
     * Determines if this request has extra headers
     * 
@@ -782,6 +793,7 @@ class OutgoingHttpRequest{
         return ( !empty($this->headers) == true );
         
     }
+        
         
     /**
     * Adds a single http header to this request.
@@ -799,6 +811,7 @@ class OutgoingHttpRequest{
         
     }
     
+    
     /**
     * Setter for the cookie_filename field on this OutgoingHttpRequest.
     * 
@@ -809,6 +822,7 @@ class OutgoingHttpRequest{
         $this->cookie_filename = $cookie_filename;
         
     }
+    
     
     /**
     * Gets the filename that contains the cookies (cookiejar).
@@ -855,6 +869,7 @@ class OutgoingHttpRequest{
         
     }
     
+    
     /**
     * Closes the curl handle
     * 
@@ -869,6 +884,7 @@ class OutgoingHttpRequest{
         }
         
     }
+    
     
     /**
     * Sets the SSL certificate to use for the request.
@@ -893,6 +909,7 @@ class OutgoingHttpRequest{
         return $this->ssl_cert_data;
         
     }
+    
     
     /**
     * put your comment there...
@@ -931,7 +948,5 @@ class OutgoingHttpRequest{
                
     }
     
-    
-
     
 }

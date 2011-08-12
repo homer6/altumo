@@ -42,6 +42,7 @@
 
 namespace Symfony\Component\ClassLoader;
 
+
 /**
  * UniversalClassLoader implements a "universal" autoloader for PHP 5.3.
  *
@@ -90,6 +91,7 @@ class UniversalClassLoader
     protected $namespaceFallback = array();
     protected $prefixFallback = array();
 
+    
     /**
      * Gets the configured namespaces.
      *

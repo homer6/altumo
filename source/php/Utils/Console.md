@@ -30,7 +30,8 @@ Dump some variables to a console.
     \Altumo\Utils\Console::dump( $my_string, $my_string, $my_string, $my_string );
     
 
-    //in the /tmp/console.log file:
+In the /tmp/console.log file
+----------------------------
     
     array(4) {
       [0]=>

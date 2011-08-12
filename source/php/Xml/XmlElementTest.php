@@ -4,15 +4,17 @@
 * This file is part of the Altumo library.
 * 
 * (c) Steve Sperandeo <steve.sperandeo@altumo.com>
+* (c) Juan Jaramillo <juan.jaramillo@altumo.com>
 *
 * For the full copyright and license information, please view the LICENSE
 * file that was distributed with this source code.
 */
 
 
-//require_once( getenv('ALTUMO_TEST_ROOT') . '/loader.php' );
+
 
 namespace Altumo\Test;
+
 
 /**
 * Unit tests for the \Altumo\Xml\XmlElement class.
@@ -23,6 +25,7 @@ class XmlElementTest extends \Altumo\Test\UnitTest{
     protected $empty_xml_element = null;
     protected $minimal_xml_element = null;
 
+    
     /**
     * Set up for these tests
     * 
@@ -34,6 +37,7 @@ class XmlElementTest extends \Altumo\Test\UnitTest{
         
     }    
 
+    
     /**
     * Tests basic parsing.
     * 
@@ -62,6 +66,7 @@ class XmlElementTest extends \Altumo\Test\UnitTest{
         $this->assertTrue( $xml_element->isLoaded() === false );
         
     }
+    
     
     /**
     * Test that the object throws and exception when assertLoaded is called.
@@ -123,9 +128,7 @@ class XmlElementTest extends \Altumo\Test\UnitTest{
         $this->assertTrue( $expected === $xml_element->queryWithXpath('food/sodium', \Altumo\Xml\XmlElement::RETURN_TYPE_STRING) );
         
     }
-    
-    
-    
+
     
     /**
     * Gets the contents of a test suite file for this object as a string.
@@ -138,6 +141,7 @@ class XmlElementTest extends \Altumo\Test\UnitTest{
         return file_get_contents( __DIR__ . '/test_data/' . $filename );
 
     }
+    
     
 }
 

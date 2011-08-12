@@ -4,13 +4,17 @@
 * This file is part of the Altumo library.
 * 
 * (c) Steve Sperandeo <steve.sperandeo@altumo.com>
+* (c) Juan Jaramillo <juan.jaramillo@altumo.com>
 *
 * For the full copyright and license information, please view the LICENSE
 * file that was distributed with this source code.
 */
 
 
+
+
 namespace Altumo\Test;
+
 
 /**
 * Unit tests for the \Altumo\String\Url class.
@@ -30,6 +34,7 @@ class UrlTest extends \Altumo\Test\UnitTest{
         
     }    
 
+    
     /**
     * Tests basic parsing.
     * 
@@ -53,6 +58,7 @@ class UrlTest extends \Altumo\Test\UnitTest{
                
     }
 
+    
     /**
     * Tests basic constructor exceptions.
     * 
@@ -140,7 +146,6 @@ class UrlTest extends \Altumo\Test\UnitTest{
         
     }
     
-
     
 }
 

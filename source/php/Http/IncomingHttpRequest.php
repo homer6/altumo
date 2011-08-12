@@ -4,6 +4,7 @@
 * This file is part of the Altumo library.
 * 
 * (c) Steve Sperandeo <steve.sperandeo@altumo.com>
+* (c) Juan Jaramillo <juan.jaramillo@altumo.com>
 *
 * For the full copyright and license information, please view the LICENSE
 * file that was distributed with this source code.
@@ -13,8 +14,8 @@
 
 
 namespace Altumo\Http;
- 
- 
+
+
 /**
 * This class is used to model an incoming http request to the server.
 * It's useful for getting the http message body and http headers from
@@ -62,9 +63,6 @@ class IncomingHttpRequest{
         return $raw_request;
         
     }
-    
-    
-    
 
     
     /**
@@ -89,8 +87,7 @@ class IncomingHttpRequest{
         return $this->headers;
         
     }
-    
-    
+        
     
     /**
     * Gets a specific HTTP header from this IncomingHttpRequest.
@@ -112,8 +109,7 @@ class IncomingHttpRequest{
         }
         
     }
-        
-        
+
     
     /**
     * Setter for the message_body field on this IncomingHttpRequest.

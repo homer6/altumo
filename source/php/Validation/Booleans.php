@@ -4,6 +4,7 @@
 * This file is part of the Altumo library.
 * 
 * (c) Steve Sperandeo <steve.sperandeo@altumo.com>
+* (c) Juan Jaramillo <juan.jaramillo@altumo.com>
 *
 * For the full copyright and license information, please view the LICENSE
 * file that was distributed with this source code.
@@ -13,8 +14,8 @@
 
 
 namespace Altumo\Validation;
- 
- 
+
+
 /**
 * This class contains functions for boolean validation.
 * These functions will return the sanitized data too.
@@ -22,8 +23,7 @@ namespace Altumo\Validation;
 * @author Steve Sperandeo <steve.sperandeo@altumo.com>
 */
 class Booleans{
-    
-    
+        
     
     /**
     * Determines if this is a boolean value (or can be interpreted as one)

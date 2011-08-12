@@ -4,14 +4,17 @@
 * This file is part of the Altumo library.
 * 
 * (c) Steve Sperandeo <steve.sperandeo@altumo.com>
+* (c) Juan Jaramillo <juan.jaramillo@altumo.com>
 *
 * For the full copyright and license information, please view the LICENSE
 * file that was distributed with this source code.
 */
 
 
- 
+
+
 namespace Altumo\Utils;
+
 
 /**
  * This class is used to find files or directories in the filesystem.
@@ -48,6 +51,7 @@ class Finder{
     protected $sort                   = false;
     protected $ignore_version_control = true;
 
+    
     /**
     * Sets maximum directory depth.
     *
@@ -62,6 +66,7 @@ class Finder{
         
     }
 
+    
     /**
     * Sets minimum directory depth.
     *
@@ -76,6 +81,7 @@ class Finder{
         return $this;
         
     }
+    
     
     /**
     * Gets the type of filesystem entity.
@@ -105,7 +111,7 @@ class Finder{
         return $finder->setType( $name );
         
     }
-  
+
   
     /**
     * Sets the type of elements to returns.
@@ -137,6 +143,7 @@ class Finder{
         
     }
 
+    
     /**
     * Converts a glob pattern to a regex pattern.
     * 
@@ -247,6 +254,7 @@ class Finder{
         
     }
 
+    
     /**
     * Traverses no further.
     *
@@ -261,6 +269,7 @@ class Finder{
         return $this;
         
     }
+    
 
     /**
     * Discards elements that matches.
@@ -277,6 +286,7 @@ class Finder{
         
     }
 
+    
     /**
     * Ignores version control directories.
     *
@@ -293,6 +303,7 @@ class Finder{
         
     }
 
+    
     /**
     * Returns files and directories ordered by name
     *
@@ -305,6 +316,7 @@ class Finder{
         
     }
 
+    
     /**
     * Returns files and directories ordered by type (directories before files), then by name
     *
@@ -317,6 +329,7 @@ class Finder{
         
     }
 
+    
     /**
     * Executes function or method for each element.
     *
@@ -355,6 +368,7 @@ class Finder{
         
     }
 
+    
     /**
     * Returns relative paths for all files and directories.
     *
@@ -381,251 +395,297 @@ class Finder{
     }
     
 
-  /**
-   * Searches files and directories which match defined rules.
-   *
-   * @return array list of files and directories
-   */
-  public function in()
-  {
-    $files    = array();
-    $here_dir = getcwd();
+    /**
+    * Searches files and directories which match defined rules.
+    *
+    * @return array list of files and directories
+    */
+    public function in(){
+        
+        $files = array();
+        $here_dir = getcwd();
 
-    $finder = clone $this;
+        $finder = clone $this;
 
-    if ($this->ignore_version_control)
-    {
-      $ignores = array('.svn', '_svn', 'CVS', '_darcs', '.arch-params', '.monotone', '.bzr', '.git', '.hg');
-
-      $finder->discard($ignores)->prune($ignores);
-    }
-
-    // first argument is an array?
-    $numargs  = func_num_args();
-    $arg_list = func_get_args();
-    if ($numargs === 1 && is_array($arg_list[0]))
-    {
-      $arg_list = $arg_list[0];
-      $numargs  = count($arg_list);
-    }
-
-    for ($i = 0; $i < $numargs; $i++)
-    {
-      $dir = realpath($arg_list[$i]);
-
-      if (!is_dir($dir))
-      {
-        continue;
-      }
-
-      $dir = str_replace('\\', '/', $dir);
-
-      // absolute path?
-      if (!self::isPathAbsolute($dir))
-      {
-        $dir = $here_dir.'/'.$dir;
-      }
-
-      $new_files = str_replace('\\', '/', $finder->search_in($dir));
-
-      if ($this->relative)
-      {
-        $new_files = str_replace(rtrim($dir, '/').'/', '', $new_files);
-      }
-
-      $files = array_merge($files, $new_files);
-    }
-
-    if ($this->sort === 'name')
-    {
-      sort($files);
-    }
-
-    return array_unique($files);
-  }
-
-  protected function search_in($dir, $depth = 0)
-  {
-    if ($depth > $this->maxdepth)
-    {
-      return array();
-    }
-
-    $dir = realpath($dir);
-
-    if ((!$this->follow_link) && is_link($dir))
-    {
-      return array();
-    }
-
-    $files = array();
-    $temp_files = array();
-    $temp_folders = array();
-    if (is_dir($dir) && is_readable($dir))
-    {
-      $current_dir = opendir($dir);
-      while (false !== $entryname = readdir($current_dir))
-      {
-        if ($entryname == '.' || $entryname == '..') continue;
-
-        $current_entry = $dir.DIRECTORY_SEPARATOR.$entryname;
-        if ((!$this->follow_link) && is_link($current_entry))
-        {
-          continue;
+        if( $this->ignore_version_control ){
+            $ignores = array( '.svn', '_svn', 'CVS', '_darcs', '.arch-params', '.monotone', '.bzr', '.git', '.hg' );
+            $finder->discard($ignores)->prune($ignores);
         }
 
-        if (is_dir($current_entry))
-        {
-          if ($this->sort === 'type')
-          {
-            $temp_folders[$entryname] = $current_entry;
-          }
-          else
-          {
-            if (($this->type === 'directory' || $this->type === 'any') && ($depth >= $this->mindepth) && !$this->is_discarded($dir, $entryname) && $this->match_names($dir, $entryname) && $this->exec_ok($dir, $entryname))
-            {
-              $files[] = $current_entry;
-            }
-
-            if (!$this->is_pruned($dir, $entryname))
-            {
-              $files = array_merge($files, $this->search_in($current_entry, $depth + 1));
-            }
-          }
-        }
-        else
-        {
-          if (($this->type !== 'directory' || $this->type === 'any') && ($depth >= $this->mindepth) && !$this->is_discarded($dir, $entryname) && $this->match_names($dir, $entryname) && $this->size_ok($dir, $entryname) && $this->exec_ok($dir, $entryname))
-          {
-            if ($this->sort === 'type')
-            {
-              $temp_files[] = $current_entry;
-            }
-            else
-            {
-              $files[] = $current_entry;
-            }
-          }
-        }
-      }
-
-      if ($this->sort === 'type')
-      {
-        ksort($temp_folders);
-        foreach($temp_folders as $entryname => $current_entry)
-        {
-          if (($this->type === 'directory' || $this->type === 'any') && ($depth >= $this->mindepth) && !$this->is_discarded($dir, $entryname) && $this->match_names($dir, $entryname) && $this->exec_ok($dir, $entryname))
-          {
-            $files[] = $current_entry;
-          }
-
-          if (!$this->is_pruned($dir, $entryname))
-          {
-            $files = array_merge($files, $this->search_in($current_entry, $depth + 1));
-          }
+        // first argument is an array?
+        $numargs  = func_num_args();
+        $arg_list = func_get_args();
+        if( $numargs === 1 && is_array($arg_list[0]) ){
+            $arg_list = $arg_list[0];
+            $numargs = count($arg_list);
         }
 
-        sort($temp_files);
-        $files = array_merge($files, $temp_files);
-      }
+        for( $i = 0; $i < $numargs; $i++ ){
+            
+            $dir = realpath($arg_list[$i]);
 
-      closedir($current_dir);
+            if( !is_dir($dir) ){
+                continue;
+            }
+
+            $dir = str_replace('\\', '/', $dir);
+
+            // absolute path?
+            if( !self::isPathAbsolute($dir) ){
+                $dir = $here_dir.'/'.$dir;
+            }
+
+            $new_files = str_replace( '\\', '/', $finder->search_in($dir) );
+
+            if( $this->relative ){
+                $new_files = str_replace(rtrim($dir, '/').'/', '', $new_files);
+            }
+
+            $files = array_merge($files, $new_files);
+            
+        }
+
+        if( $this->sort === 'name' ){
+            sort($files);
+        }
+
+        return array_unique($files);
+        
     }
 
-    return $files;
-  }
+    
+    /**
+    * Searches in the given directory for files or directories.
+    * 
+    * @param string $dir
+    * @param integer $depth
+    * 
+    * @return array                         //of strings of the files and 
+    *                                         directories that it finds
+    */
+    protected function search_in( $dir, $depth = 0 ){
+        
+        if( $depth > $this->maxdepth ){
+            return array();
+        }
 
-  protected function match_names($dir, $entry)
-  {
-    if (!count($this->names)) return true;
+        $dir = realpath( $dir );
 
-    // Flags indicating that there was attempts to match
-    // at least one "not_name" or "name" rule respectively
-    // to following variables:
-    $one_not_name_rule = false;
-    $one_name_rule = false;
+        if( (!$this->follow_link) && is_link($dir) ){
+            return array();
+        }
 
-    foreach ($this->names as $args)
-    {
-      list($not, $regex) = $args;
-      $not ? $one_not_name_rule = true : $one_name_rule = true;
-      if (preg_match($regex, $entry))
-      {
-        // We must match ONLY ONE "not_name" or "name" rule:
-        // if "not_name" rule matched then we return "false"
-        // if "name" rule matched then we return "true"
-        return $not ? false : true;
-      }
+        $files = array();
+        $temp_files = array();
+        $temp_folders = array();
+        if( is_dir($dir) && is_readable($dir) ){
+            
+            $current_dir = opendir($dir);
+            while( false !== $entryname = readdir($current_dir) ){
+                              
+                if( $entryname == '.' || $entryname == '..' ){
+                    continue;  
+                }
+
+                $current_entry = $dir . DIRECTORY_SEPARATOR . $entryname;
+                if( (!$this->follow_link) && is_link($current_entry) ){
+                    continue;
+                }
+
+                if( is_dir($current_entry) ){
+                    
+                    if( $this->sort === 'type' ){
+                        
+                        $temp_folders[$entryname] = $current_entry;
+                        
+                    }else{
+                        
+                        if(
+                            ($this->type === 'directory' || $this->type === 'any') && 
+                            ($depth >= $this->mindepth) && 
+                            !$this->is_discarded($dir, $entryname) && 
+                            $this->match_names($dir, $entryname) && 
+                            $this->exec_ok($dir, $entryname) 
+                        ){
+                            $files[] = $current_entry;
+                        }
+
+                        if( !$this->is_pruned($dir, $entryname) ){
+                            $files = array_merge($files, $this->search_in($current_entry, $depth + 1));
+                        }
+                        
+                    }
+                    
+                }else{
+                    
+                    if( 
+                        ($this->type !== 'directory' || $this->type === 'any') && 
+                        ($depth >= $this->mindepth) && 
+                        !$this->is_discarded($dir, $entryname) && 
+                        $this->match_names($dir, $entryname) && 
+                        $this->size_ok($dir, $entryname) && 
+                        $this->exec_ok($dir, $entryname)
+                    ){
+                        
+                        if( $this->sort === 'type' ){
+                            $temp_files[] = $current_entry;
+                        }else{
+                            $files[] = $current_entry;
+                        }
+                    
+                    }
+                    
+                }
+                
+            }
+
+            if( $this->sort === 'type' ){
+                
+                ksort( $temp_folders );
+                foreach( $temp_folders as $entryname => $current_entry ){
+                    
+                    if( 
+                        ($this->type === 'directory' || $this->type === 'any') && 
+                        ($depth >= $this->mindepth) && 
+                        !$this->is_discarded($dir, $entryname) && 
+                        $this->match_names($dir, $entryname) && 
+                        $this->exec_ok($dir, $entryname)
+                    ){
+                        $files[] = $current_entry;
+                    }
+
+                    if( !$this->is_pruned($dir, $entryname) ){
+                        $files = array_merge( $files, $this->search_in($current_entry, $depth + 1) );
+                    }
+                    
+                }
+
+                sort( $temp_files );
+                $files = array_merge( $files, $temp_files );
+                
+            }
+
+            closedir( $current_dir );
+            
+        }
+
+        return $files;
+        
     }
 
-    if ($one_not_name_rule && $one_name_rule)
-    {
-      return false;
-    }
-    else if ($one_not_name_rule)
-    {
-      return true;
-    }
-    else if ($one_name_rule)
-    {
-      return false;
-    }
-    return true;
-  }
+    
+    protected function match_names( $dir, $entry ){
+        
+        if( !count($this->names) ){
+            return true;   
+        }
 
-  protected function size_ok($dir, $entry)
-  {
-    if (0 === count($this->sizes)) return true;
+        // Flags indicating that there was attempts to match
+        // at least one "not_name" or "name" rule respectively
+        // to following variables:
+        $one_not_name_rule = false;
+        $one_name_rule = false;
 
-    if (!is_file($dir.DIRECTORY_SEPARATOR.$entry)) return true;
+        foreach( $this->names as $args ){
+            
+            list($not, $regex) = $args;
+            $not ? $one_not_name_rule = true : $one_name_rule = true;
+            if( preg_match($regex, $entry) ){
+                // We must match ONLY ONE "not_name" or "name" rule:
+                // if "not_name" rule matched then we return "false"
+                // if "name" rule matched then we return "true"
+                return $not ? false : true;
+            }
+            
+        }
 
-    $filesize = filesize($dir.DIRECTORY_SEPARATOR.$entry);
-    foreach ($this->sizes as $number_compare)
-    {
-      if (!$number_compare->test($filesize)) return false;
-    }
-
-    return true;
-  }
-
-  protected function is_pruned($dir, $entry)
-  {
-    if (0 === count($this->prunes)) return false;
-
-    foreach ($this->prunes as $args)
-    {
-      $regex = $args[1];
-      if (preg_match($regex, $entry)) return true;
+        if( $one_not_name_rule && $one_name_rule ){
+            return false;
+        }else if( $one_not_name_rule ){
+            return true;
+        }else if( $one_name_rule ){
+            return false;
+        }
+        return true;
+        
     }
 
-    return false;
-  }
+    
+    protected function size_ok( $dir, $entry ){
+        
+        if( 0 === count($this->sizes) ){
+            return true;    
+        }
 
-  protected function is_discarded($dir, $entry)
-  {
-    if (0 === count($this->discards)) return false;
+        if( !is_file($dir . DIRECTORY_SEPARATOR . $entry) ){
+            return true;
+        }
 
-    foreach ($this->discards as $args)
-    {
-      $regex = $args[1];
-      if (preg_match($regex, $entry)) return true;
+        $filesize = filesize( $dir . DIRECTORY_SEPARATOR . $entry );
+        foreach( $this->sizes as $number_compare ){
+            if( !$number_compare->test($filesize) ){
+                return false;   
+            }
+        }
+
+        return true;
+        
+    }
+    
+
+    protected function is_pruned( $dir, $entry ){
+        
+        if( 0 === count($this->prunes) ){
+            return false;    
+        }
+
+        foreach( $this->prunes as $args ){
+            $regex = $args[1];
+            if( preg_match($regex, $entry) ){
+                return true;    
+            }
+        }
+
+        return false;
+        
+    }
+  
+
+    protected function is_discarded( $dir, $entry ){
+        
+        if( 0 === count($this->discards) ){
+            return false;    
+        }
+
+        foreach( $this->discards as $args ){
+            $regex = $args[1];
+            if( preg_match($regex, $entry) ){
+                return true;    
+            }
+        }
+
+        return false;
+        
     }
 
-    return false;
-  }
+  
+    protected function exec_ok( $dir, $entry ){
+        
+        if( 0 === count($this->execs) ){
+            return true;
+        }
 
-  protected function exec_ok($dir, $entry)
-  {
-    if (0 === count($this->execs)) return true;
+        foreach( $this->execs as $exec ){
+            if( !call_user_func_array( $exec, array($dir, $entry) ) ){
+                return false;    
+            }
+        }
 
-    foreach ($this->execs as $exec)
-    {
-      if (!call_user_func_array($exec, array($dir, $entry))) return false;
+        return true;
+        
     }
 
-    return true;
-  }
-
+  
     /**
     * Determines if $path is an absolute path
     * 
@@ -653,6 +713,9 @@ class Finder{
     }
   
 }
+
+
+
 
 /**
  * Match globbing patterns against text.
@@ -775,6 +838,9 @@ class GlobToRegex
     return '#^'.$regex.'$#';
   }
 }
+
+
+
 
 /**
  * Numeric comparisons.

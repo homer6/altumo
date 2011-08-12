@@ -4,6 +4,7 @@
 * This file is part of the Altumo library.
 * 
 * (c) Steve Sperandeo <steve.sperandeo@altumo.com>
+* (c) Juan Jaramillo <juan.jaramillo@altumo.com>
 *
 * For the full copyright and license information, please view the LICENSE
 * file that was distributed with this source code.
@@ -13,8 +14,8 @@
 
 
 namespace Altumo\Packages\Services\PivotalTracker;
- 
- 
+
+
 /**
 * This class represents an single interface to the Pivotal Tracker service.
 * It is a package, so it depends on MongoDB and the mongo pecl extension.
@@ -52,6 +53,7 @@ class PivotalTrackerPackage{
         }
         
     }
+    
     
     /**
     * Setter for the token field on this PivotalTrackerPackage.
@@ -159,8 +161,6 @@ class PivotalTrackerPackage{
         return $this->client;
         
     }
-        
-    
     
     
     /**
@@ -268,6 +268,7 @@ class PivotalTrackerPackage{
         
     }
     
+    
     /**
     * Gets the namespace for the Projects Collection
     * 
@@ -279,6 +280,7 @@ class PivotalTrackerPackage{
         
     }
     
+    
     /**
     * Gets the MongoCollection for the Stories collection.
     * 
@@ -289,6 +291,7 @@ class PivotalTrackerPackage{
         return $this->getDatabase()->createCollection( $this->getStoriesCollectionNamespace() ); 
         
     }
+    
     
     /**
     * Gets the namespace for the Stories Collection
@@ -360,6 +363,7 @@ class PivotalTrackerPackage{
             
     }
     
+    
     /**
     * Gets a stories by Pivotal project id
     * 
@@ -385,7 +389,6 @@ class PivotalTrackerPackage{
             return $stories;
             
     }
-    
 
     
 }

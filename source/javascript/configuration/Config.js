@@ -8,19 +8,19 @@
 * file that was distributed with this source code.
 */
 
+
+
+
+goog.provide( 'altumo.configuration.Config' );
+
+
 /**
- * @fileoverview Config handler for the Altumo Library.
- * 
- * Keeps global configuration items including routing.
- */
- 
-// Provides
-    goog.provide( 'altumo.configuration.Config' );
-
-// Requires
-    //goog.require( 'altumo' );
-
-
+* @fileoverview Config handler for the Altumo Library.
+* 
+* Keeps global configuration items including routing.
+* 
+* @author Juan Jaramillo <juan.jaramillo@altumo.com>
+*/
 altumo.configuration = altumo.configuration || {};
 
 
@@ -45,6 +45,7 @@ altumo.configuration.Config = function(){
 altumo.configuration.Config.prototype.get = function( setting_key, default_return ){
 
 };
+
 
 /**
 * Get a config setting

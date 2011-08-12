@@ -4,6 +4,7 @@
 * This file is part of the Altumo library.
 * 
 * (c) Steve Sperandeo <steve.sperandeo@altumo.com>
+* (c) Juan Jaramillo <juan.jaramillo@altumo.com>
 *
 * For the full copyright and license information, please view the LICENSE
 * file that was distributed with this source code.
@@ -43,8 +44,6 @@ class Numerics{
     }
     
     
-    
-    
     /**
     * Throws an exception if this is not a positive integer.
     * If this is a string, recasts as integer and returns it.
@@ -62,8 +61,7 @@ class Numerics{
         return $integer;
         
     }
-    
-    
+
     
     /**
     * Throws an exception if this is not an integer.
@@ -84,6 +82,7 @@ class Numerics{
         return (integer)$integer;
         
     }
+    
     
     /**
     * Determines if this is an integer (or castable as one).
@@ -122,8 +121,6 @@ class Numerics{
     }
     
     
-    
-    
     /**
     * Throws an exception if this is not a positive double.
     * If this is a string, recasts as double and returns it.
@@ -141,7 +138,6 @@ class Numerics{
         return $double;
         
     }
-    
     
     
     /**
@@ -163,7 +159,6 @@ class Numerics{
         return (double)$double;
         
     }
-    
     
     
 }

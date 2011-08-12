@@ -4,6 +4,7 @@
 * This file is part of the Altumo library.
 * 
 * (c) Steve Sperandeo <steve.sperandeo@altumo.com>
+* (c) Juan Jaramillo <juan.jaramillo@altumo.com>
 *
 * For the full copyright and license information, please view the LICENSE
 * file that was distributed with this source code.
@@ -13,7 +14,8 @@
 
 
 namespace Altumo\Test;
- 
+
+
 /**
 * This class is the entry point the run all unit tests. It is called directly 
 * from the CLI (or web application).
@@ -42,6 +44,7 @@ class TestSuite{
     protected $results = array();
     protected $counts = array();
     
+    
     /**
     * Runs all of the unit tests in the suppied directory (and all of the 
     * subdirectories).
@@ -59,6 +62,7 @@ class TestSuite{
         $this->runTests( $test_directory );
         
     }
+    
     
     /**
     * Runs all of the unit tests in the suppied directory (and all of the 
@@ -136,8 +140,7 @@ class TestSuite{
         echo $line;
         
     }
-    
-    
+        
     
     /**
     * Getter for the results field on this TestSuite.
@@ -149,6 +152,7 @@ class TestSuite{
         return $this->results;
         
     }
+    
     
     /**
     * Adds a test result to this TestSuite.
@@ -181,6 +185,7 @@ class TestSuite{
         $this->results[] = $result;
         
     }
+    
     
     /**
     * Adds a test result to this TestSuite.

@@ -8,20 +8,24 @@
 * file that was distributed with this source code.
 */
 
+
+
+
+goog.require( 'altumo.configuration.Config' );
+goog.require( 'altumo.routing.Router' );
+
+goog.provide( 'altumo.core.Altumo' );
+
+
 /**
- * @fileoverview global Altumo object
- *
- * alt is a global object and it's an instance of altumo.core.Altumo
- */
- 
-// Provides
-    goog.provide( 'altumo.core.Altumo' );
-
-// Requires
-    goog.require( 'altumo.configuration.Config' );
-    goog.require( 'altumo.routing.Router' );
-
+* @fileoverview global Altumo object
+*
+* alt is a global object and it's an instance of altumo.core.Altumo
+* 
+* @author Juan Jaramillo <juan.jaramillo@altumo.com>
+*/
 altumo.core = altumo.core || {};
+
     
 /**
 * Initializes all the core components of the Altumo singleton

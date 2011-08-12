@@ -4,6 +4,7 @@
 * This file is part of the Altumo library.
 * 
 * (c) Steve Sperandeo <steve.sperandeo@altumo.com>
+* (c) Juan Jaramillo <juan.jaramillo@altumo.com>
 *
 * For the full copyright and license information, please view the LICENSE
 * file that was distributed with this source code.
@@ -13,7 +14,8 @@
 
 
 namespace Altumo\Test;
- 
+
+
 /**
 * This class holds all of the unit tests. It is the base class for all unit
 * tests. It is designed to be extended.
@@ -33,6 +35,7 @@ class UnitTest{
     
     protected $test_suite = null;
 
+    
     /**
     * Initializes this unit test with a reference to the calling test suite.
     * 
@@ -77,6 +80,7 @@ class UnitTest{
 
     }   
     
+    
     /**
     * Setter for the test_suite field on this UnitTest.
     * 
@@ -99,6 +103,7 @@ class UnitTest{
         return $this->test_suite;
         
     }
+    
     
     /**
     * Writes the output to a location. Defaults to stdout.

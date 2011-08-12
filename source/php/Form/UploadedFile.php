@@ -4,15 +4,19 @@
 * This file is part of the Altumo library.
 * 
 * (c) Steve Sperandeo <steve.sperandeo@altumo.com>
+* (c) Juan Jaramillo <juan.jaramillo@altumo.com>
 *
 * For the full copyright and license information, please view the LICENSE
 * file that was distributed with this source code.
 */
 
-namespace Altumo\Form;
- 
 
- 
+
+
+
+namespace Altumo\Form; 
+
+
 /**
 * This class represents an uploaded file that hasn't been moved.
 * It's useful for performing common operations on uploaded files.
@@ -47,7 +51,7 @@ namespace Altumo\Form;
 * 
 */
 class UploadedFile{
-        
+
     protected $filename = null;
     protected $mime_type = null;
     protected $error = null;
@@ -204,8 +208,6 @@ class UploadedFile{
         return $this->temp_location;
         
     }
-        
-    
     
 
     /**
@@ -313,11 +315,8 @@ class UploadedFile{
         return $message;        
         
     }
-    
-    
-    
-    
 
+    
     /**
     * Creates an array of UploadedFile objects from the $_FILES array.
     * 

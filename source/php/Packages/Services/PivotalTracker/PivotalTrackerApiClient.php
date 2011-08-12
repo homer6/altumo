@@ -4,6 +4,7 @@
 * This file is part of the Altumo library.
 * 
 * (c) Steve Sperandeo <steve.sperandeo@altumo.com>
+* (c) Juan Jaramillo <juan.jaramillo@altumo.com>
 *
 * For the full copyright and license information, please view the LICENSE
 * file that was distributed with this source code.
@@ -13,8 +14,8 @@
 
 
 namespace Altumo\Packages\Services\PivotalTracker;
- 
- 
+
+
 /**
 * This class represents an HTTP API client for Pivotal that returns translated
 * JSON responses.
@@ -24,6 +25,7 @@ namespace Altumo\Packages\Services\PivotalTracker;
 class PivotalTrackerApiClient{
     
     protected $token = null;
+    
     
     /**
     * Constructor for this PivotalTrackerApiClient.
@@ -38,6 +40,7 @@ class PivotalTrackerApiClient{
         $this->setToken($token);
         
     }
+    
     
     /**
     * Setter for the token field on this PivotalTrackerApiClient.
@@ -103,6 +106,7 @@ class PivotalTrackerApiClient{
         return $projects;
         
     }
+    
     
     /**
     * Gets all stories by project id.

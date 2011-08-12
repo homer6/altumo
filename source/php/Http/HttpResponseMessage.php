@@ -4,6 +4,7 @@
 * This file is part of the Altumo library.
 * 
 * (c) Steve Sperandeo <steve.sperandeo@altumo.com>
+* (c) Juan Jaramillo <juan.jaramillo@altumo.com>
 *
 * For the full copyright and license information, please view the LICENSE
 * file that was distributed with this source code.
@@ -13,7 +14,7 @@
 
 
 namespace Altumo\Http;
- 
+
 /**
 * This class is used to easily parse a full raw HTTP Response.
 * 
@@ -31,6 +32,7 @@ class HttpResponseMessage{
     protected $lowercase_headers = array();
     protected $raw_message_body = '';
     protected $raw_http_response = '';
+    
     
     /**
     * Contstructor for this raw HTTP Response.
@@ -51,6 +53,7 @@ class HttpResponseMessage{
             $this->parseRawHttpResponse($raw_http_response);
         
     }
+    
     
     /**
     * Parses the raw HTTP response into its logical parts.
@@ -209,6 +212,7 @@ class HttpResponseMessage{
         
     }
     
+    
     /**
     * Determines if this response has the supplied header field name.
     * Performs a case-insensitive comparison.
@@ -300,6 +304,7 @@ class HttpResponseMessage{
         
     }
     
+    
     /**
     * Setter for the raw_message_body field on this HttpResponseMessage.
     * 
@@ -321,7 +326,8 @@ class HttpResponseMessage{
     
         return $this->raw_message_body;
         
-    }   
+    }
+    
     
     /**
     * Setter for the raw_http_response field on this HttpResponseMessage.

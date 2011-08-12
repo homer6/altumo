@@ -4,6 +4,7 @@
 * This file is part of the Altumo library.
 * 
 * (c) Steve Sperandeo <steve.sperandeo@altumo.com>
+* (c) Juan Jaramillo <juan.jaramillo@altumo.com>
 *
 * For the full copyright and license information, please view the LICENSE
 * file that was distributed with this source code.
@@ -13,8 +14,8 @@
 
 
 namespace Altumo\Xml;
- 
- 
+
+
 /**
 * This class represents a single XML element.
 * This class is designed to hide the xml parser used and to only expose the 
@@ -23,7 +24,6 @@ namespace Altumo\Xml;
 * @author Steve Sperandeo <steve.sperandeo@altumo.com>
 */
 class XmlElement{
-     
     
     protected $loaded = false;
     protected $valid = false;
@@ -150,6 +150,7 @@ class XmlElement{
         
     }
     
+    
     /**
     * Loads this xml element from the supplied filename
     * eg.
@@ -264,6 +265,7 @@ class XmlElement{
         
     }
     
+    
     /**
     * Throws an \Exception if this object is not loaded.
     * 
@@ -276,6 +278,7 @@ class XmlElement{
         }
         
     }
+    
     
     /**
     * Throws an \Exception if this object is not valid.
@@ -344,7 +347,6 @@ class XmlElement{
     }
 
 
-
     /**
     * Returns the contents of this xml element as a string.
     * 
@@ -364,6 +366,7 @@ class XmlElement{
         return utf8_encode($xml_string);
         
     }
+    
     
     /**
     * Adds an attribute to this element
@@ -397,7 +400,6 @@ class XmlElement{
         return new XmlElement($child);
                 
     }
-
     
     
     /**
@@ -411,38 +413,44 @@ class XmlElement{
     */
     static public function prettyFormatXmlString( $xml_string, $indent_size = 4 ){
           
-         $level = $indent_size;  
-         $indent = 0; // current indentation level  
-         $pretty = array();
-           
-         // get an array containing each XML element  
-         $xml = explode("\n", preg_replace('/>\s*</', ">\n<", $xml_string));  
-       
-         // shift off opening XML tag if present  
-         if (count($xml) && preg_match('/^<\?\s*xml/', $xml[0])) {  
-           $pretty[] = array_shift($xml);  
-         }  
-      
-         foreach ($xml as $el) {  
-           if (preg_match('/^<([\w])+[^>\/]*>$/U', $el)) {  
-               // opening tag, increase indent  
-               $pretty[] = str_repeat(' ', $indent) . $el;  
-               $indent += $level;  
-           } else {  
-             if (preg_match('/^<\/.+>$/', $el)) {              
-               $indent -= $level;  // closing tag, decrease indent  
-             }  
-             if ($indent < 0) {  
-               $indent += $level;  
-             }  
-             $pretty[] = str_repeat(' ', $indent) . $el;  
-           }  
-         }     
-         $xml = implode("\n", $pretty);     
-         return $xml;
+        $level = $indent_size;  
+        $indent = 0; // current indentation level  
+        $pretty = array();
+
+        // get an array containing each XML element  
+        $xml = explode( "\n", preg_replace('/>\s*</', ">\n<", $xml_string) );  
+
+        // shift off opening XML tag if present  
+        if( count($xml) && preg_match('/^<\?\s*xml/', $xml[0]) ){  
+            $pretty[] = array_shift($xml);
+        }
+
+        foreach( $xml as $el ){
+            
+            if( preg_match('/^<([\w])+[^>\/]*>$/U', $el) ){
+                
+                // opening tag, increase indent  
+                $pretty[] = str_repeat(' ', $indent) . $el;  
+                $indent += $level;
+                
+            }else{
+             
+                if( preg_match('/^<\/.+>$/', $el) ){
+                    $indent -= $level;  // closing tag, decrease indent  
+                }
+                if( $indent < 0 ){
+                    $indent += $level;
+                }
+                $pretty[] = str_repeat( ' ', $indent ) . $el;
+                
+            }
+            
+        }
+        
+        $xml = implode("\n", $pretty);     
+        return $xml;
         
     }    
-    
     
     
     /**
@@ -458,7 +466,6 @@ class XmlElement{
     }
     
     
-    
     /**
     * Gets this element as a JSON string.
     * 
@@ -469,9 +476,6 @@ class XmlElement{
         return json_encode( $this->getXmlElement() );
         
     }
-    
-    
-    
-    
+
     
 }

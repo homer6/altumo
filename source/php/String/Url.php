@@ -1,34 +1,36 @@
 <?php
 
 /*
- * This file is part of the Altumo library.
- *
- * (c) Steve Sperandeo <steve.sperandeo@altumo.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
- 
+* This file is part of the Altumo library.
+*
+* (c) Steve Sperandeo <steve.sperandeo@altumo.com>
+* (c) Juan Jaramillo <juan.jaramillo@altumo.com>
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
+
+
+
+
 namespace Altumo\String;
- 
-   
 
 
- /**
- * This class represents a url.
- * 
- * You can use it to parse, validate or build urls.
- * 
- * It currently only partially supports the ftp, http and https schemes.
- * 
- * eg.
- *   $url = 'http://username:password@hostname/path?arg=value#anchor';
- * 
- * 
- * @see http://ca.php.net/manual/en/function.parse-url.php
- * @see http://www.ietf.org/rfc/rfc1738.txt
- * @author Steve Sperandeo <steve.sperandeo@altumo.com>
- */
+/**
+* This class represents a url.
+* 
+* You can use it to parse, validate or build urls.
+* 
+* It currently only partially supports the ftp, http and https schemes.
+* 
+* eg.
+*   $url = 'http://username:password@hostname/path?arg=value#anchor';
+* 
+* 
+* @see http://ca.php.net/manual/en/function.parse-url.php
+* @see http://www.ietf.org/rfc/rfc1738.txt
+* @author Steve Sperandeo <steve.sperandeo@altumo.com>
+*/
 class Url{
 
     protected $scheme = null;               //http, https, ftp

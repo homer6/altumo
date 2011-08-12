@@ -1,24 +1,26 @@
 <?php
 
 /*
- * This file is part of the Altumo library.
- *
- * (c) Steve Sperandeo <steve.sperandeo@altumo.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
- 
+* This file is part of the Altumo library.
+*
+* (c) Steve Sperandeo <steve.sperandeo@altumo.com>
+* (c) Juan Jaramillo <juan.jaramillo@altumo.com>
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
+
+
+
+
 namespace Altumo\String;
- 
-   
 
 
- /**
- * This class contains a number of string helper functions.
- * 
- * @author Steve Sperandeo <steve.sperandeo@altumo.com>
- */
+/**
+* This class contains a number of string helper functions.
+* 
+* @author Steve Sperandeo <steve.sperandeo@altumo.com>
+*/
 class String{
 
     
@@ -215,4 +217,6 @@ class String{
         return preg_replace('/[^a-zA-Z]/', '', $string);
         
     }
+    
+    
 }

@@ -4,6 +4,7 @@
 * This file is part of the Altumo library.
 * 
 * (c) Steve Sperandeo <steve.sperandeo@altumo.com>
+* (c) Juan Jaramillo <juan.jaramillo@altumo.com>
 *
 * For the full copyright and license information, please view the LICENSE
 * file that was distributed with this source code.
@@ -13,8 +14,8 @@
 
 
 namespace Altumo\Validation;
- 
- 
+
+
 /**
 * This class contains functions for array validation.
 * These functions will return the sanitized data too.
@@ -91,10 +92,7 @@ class Arrays{
         return $array;
         
     }
-    
-    
-    
-    
+
     
     /**
     * Removes all of the elements from the provided array that are empty strings or null.

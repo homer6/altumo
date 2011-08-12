@@ -8,30 +8,30 @@
 * file that was distributed with this source code.
 */
 
+
+
+
+goog.provide( 'altumo.routing.Router' );
+
+
 /**
- * @fileoverview Routing manager for the Altumo Library
- * 
- * A directory of Routes for use in the client side.
- */
- 
-// Provides
-    goog.provide( 'altumo.routing.Router' );
-
-// Requires
-    //goog.require( 'alt' );
-
-
-
+* @fileoverview Routing manager for the Altumo Library
+* 
+* A directory of Routes for use in the client side.
+* 
+* @author Juan Jaramillo <juan.jaramillo@altumo.com>
+*/
 altumo.routing = altumo.routing || {};
 
+
 /**
- * Provides route-key to route resolution for client side widgets.
- *
- * @constructor
- * 
- * @param options
- *      - routes: Map of routes pre-load.
- **/
+* Provides route-key to route resolution for client side widgets.
+*
+* @constructor
+* 
+* @param options
+*      - routes: Map of routes pre-load.
+*/
 altumo.routing.Router = function( options ){
 
     // Data storage
@@ -55,6 +55,7 @@ altumo.routing.Router = function( options ){
 * @param Array routes
 */
 altumo.routing.Router.prototype.loadRoutes = function( routes ){
+    
     me = this;
     
     $.each( routes, function( route_key, route ){
@@ -141,7 +142,6 @@ altumo.routing.Router.prototype.getUrl = function( expression ){
 }
 
 
-
 /**
 * Checkes whether a route_key is valid.
 * 
@@ -166,4 +166,5 @@ altumo.routing.Router.prototype.validateRouteKey = function( route_key, throw_on
     }
     
     return true;
+    
 }

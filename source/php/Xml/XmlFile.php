@@ -4,6 +4,7 @@
 * This file is part of the Altumo library.
 * 
 * (c) Steve Sperandeo <steve.sperandeo@altumo.com>
+* (c) Juan Jaramillo <juan.jaramillo@altumo.com>
 *
 * For the full copyright and license information, please view the LICENSE
 * file that was distributed with this source code.
@@ -11,9 +12,8 @@
 
 
 
-namespace Altumo\Xml;
 
-require_once __DIR__ . '/XmlElement.php';
+namespace Altumo\Xml;
  
  
 /**
@@ -35,6 +35,7 @@ abstract class XmlFile{
     protected $file_contents = null;
     protected $xml_root = null;
 
+    
     /**
     * Constructor for this XmlFile.
     * 
@@ -48,8 +49,7 @@ abstract class XmlFile{
         $this->setFilename( $filename, $readonly );
      
     }
-    
-    
+        
     
     /**
     * Setter for the filename field on this XmlFile.
@@ -133,6 +133,7 @@ abstract class XmlFile{
         }
         
     }
+    
     
     /**
     * Gets the default empty file as an xml string.
@@ -265,6 +266,7 @@ abstract class XmlFile{
         
     }
     
+    
     /**
     * Throws an exception if this file is not writable.
     * 
@@ -307,10 +309,7 @@ abstract class XmlFile{
         }
         
     }
-    
-    
-        
-    
+
     
     /**
     * Closes this file, if it's open. This will write to it by default.
@@ -366,8 +365,6 @@ abstract class XmlFile{
         $this->closeFile();
         
     }
-    
-    
-    
+
     
 }

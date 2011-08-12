@@ -26,10 +26,10 @@ elements to the page.
             
         //optionally, use the xml wrapper to find what you're looking for
             $xml_element = new \Altumo\Xml\XmlElement( $xml );    
-            $title = $xml_element->xpath('channel/title');
-            $link = $xml_element->xpath('channel/link');
-            $copyright = $xml_element->xpath('channel/copyright');
-            $items = $xml_element->queryWithXpath('channel/item', \Altumo\Xml\XmlElement::RETURN_TYPE_XML_ELEMENT );
+            $title = $xml_element->xpath( 'channel/title' );
+            $link = $xml_element->xpath( 'channel/link' );
+            $copyright = $xml_element->xpath( 'channel/copyright' );
+            $items = $xml_element->queryWithXpath( 'channel/item', \Altumo\Xml\XmlElement::RETURN_TYPE_XML_ELEMENT );
         
             echo 'Title: ' . $title . '<br /><br />';
         

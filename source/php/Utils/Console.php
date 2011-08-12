@@ -4,6 +4,7 @@
 * This file is part of the Altumo library.
 * 
 * (c) Steve Sperandeo <steve.sperandeo@altumo.com>
+* (c) Juan Jaramillo <juan.jaramillo@altumo.com>
 *
 * For the full copyright and license information, please view the LICENSE
 * file that was distributed with this source code.
@@ -13,8 +14,8 @@
 
 
 namespace Altumo\Utils;
- 
- 
+
+
 /**
 * This class facilitates easy writing to a log file on the web server for 
 * debugging purposes.
@@ -28,7 +29,8 @@ class Console{
     
     protected $filename = null;
     protected $file_pointer = null;
-        
+    
+    
     /**
     * Creates a Console object. Opens the filename provided.
     * Defaults to a filename called "console.log" in the system temp directory.
@@ -62,6 +64,7 @@ class Console{
         
     }
     
+    
     /**
     * Destructor. Closes the file and ends the session.
     * 
@@ -71,7 +74,6 @@ class Console{
         fclose( $this->getFilePointer() );
         
     }
-    
     
        
     /**

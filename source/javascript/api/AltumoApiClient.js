@@ -8,29 +8,37 @@
 * file that was distributed with this source code.
 */
 
-/**
- * @fileoverview Base API Client
 
- */
- 
-// Provides
-    goog.provide( 'altumo.api' );
-    goog.provide( 'altumo.api.AltumoApiClient' );
 
-// Requires
-    //goog.require( 'alt' );
+
+goog.provide( 'altumo.api' );
+goog.provide( 'altumo.api.AltumoApiClient' );
 
 
 /**
- * Provides a base Altumo API client side library.
- * 
- * This Class is to be extended by each Widget to implement
- * specific functionallity.
- *
- * @constructor
- **/
+* @fileoverview Base API Client
+* 
+* 
+* 
+*/
+
+
+/**
+* Provides a base Altumo API client side library.
+* 
+* This Class is to be extended by each Widget to implement
+* specific functionallity.
+* 
+* @author Juan Jaramillo <juan.jaramillo@altumo.com>
+*/
 altumo.api = altumo.api || {};
 
+
+/**
+* Constructs this base API Client.
+* 
+* @constructor
+*/
 altumo.api.AltumoApiClient = function(){
 
 
@@ -60,6 +68,7 @@ altumo.api.AltumoApiClient = function(){
 *                                   // route to be used.
 */
 altumo.api.AltumoApiClient.prototype.sendRequest = function( route, http_method, headers, parameters, request_body, callback, errorCallback ){
+    
     me = this;
 
     // Get url to call
@@ -161,7 +170,6 @@ altumo.api.AltumoApiClient.prototype.handleSuccessfulResponse = function( data, 
 };
 
 
-
 /**
 * This function is invoqued when a request receives an erroneous response.
 * 
@@ -202,7 +210,6 @@ altumo.api.AltumoApiClient.prototype.handleErroneousResponse = function( jqXHR, 
 };
 
 
-
 /**
 * This is the default "errorCallback" function for handling the array of errors
 * that can be returned by an API call.
@@ -222,10 +229,6 @@ altumo.api.AltumoApiClient.prototype.handleErrorArray = function( errors ){
     });
     
 };
-
-
-
-
 
 
 /** Sample request code.
