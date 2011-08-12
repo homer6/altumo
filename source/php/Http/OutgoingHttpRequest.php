@@ -70,6 +70,10 @@ class OutgoingHttpRequest{
     //the resource to this curl object
     
     protected $ssl_cert_data = null;
+    //SSL certificate data to be used for requests (PEM-encoded)
+    
+    protected $ssl_cert_temp_file = null;
+    //path to a file that contains the SSL certificate data to be used on requests
     
     const HTTP_METHOD_POST = 'POST';
     const HTTP_METHOD_GET = 'GET';
@@ -204,9 +208,9 @@ class OutgoingHttpRequest{
                 //curl_setopt( $curl_handle, CURLOPT_COOKIELIST, false ); throws a warning on newer versions of curl.
             }
             
-            //use a secutiy certificate if data is set
+            // if an SSL certificate is set, use it in this request
                 if( $this->getSslCertificateData() != null ){
-                    curl_setopt( $curl_handle, CURLOPT_SSLCERT, $this->getSslCertificateAsTempFilePath() );
+                    curl_setopt( $curl_handle, CURLOPT_SSLCERT, $this->createSslCertificateTempFile() );
                 }
             
             
@@ -885,24 +889,55 @@ class OutgoingHttpRequest{
         
     }
     
-    
     /**
-    * Sets the SSL certificate to use for the request.
+    * Sets the path where the SSL certificate file is stored.
     * 
-    * @param mixed $ssl_cert_data should be the contents of a PEM ssl certificate file.
-    * @returns OutgoingHttpRequest
+    * @param mixed $ssl_cert_temp_file 
+    *   // Path to the cert temp file
+    * 
+    * @returns void
     */
-    public function setSslCertificateData( $ssl_cert_data ){
+    protected function setSslCertificateTempFile( $ssl_cert_temp_file ){
         
-        $this->ssl_cert_data = $ssl_cert_data;
-        
-        return $this;
-        
+        $this->ssl_cert_temp_file = $ssl_cert_temp_file;
+
     }
     
     
     /**
-    * Get the path to an SSL Cert file to use on the next request.
+    * Gets the path where the SSL certificate file is stored.
+    * 
+    * 
+    * @returns string
+    *   // Path to the cert temp file
+    */
+    protected function getSslCertificateTempFile( ){
+        
+        $this->ssl_cert_temp_file = $ssl_cert_temp_file;
+
+    }
+    
+
+    /**
+    * Sets the SSL certificate to use for the request
+    * 
+    * @param mixed $ssl_cert_data 
+    *   // a PEM-encoded ssl certificate string.
+    * 
+    * @returns void
+    */
+    public function setSslCertificateData( $ssl_cert_data ){
+        
+        $this->ssl_cert_data = $ssl_cert_data;
+
+    }
+    
+    
+    /**
+    * Gets the SSL certificate (PEM-encoded) string.
+    * 
+    * @returns string
+    *   // PEM-encoded SSL ceritificate data
     **/
     public function getSslCertificateData(){
         
@@ -912,32 +947,96 @@ class OutgoingHttpRequest{
     
     
     /**
-    * put your comment there...
+    * Stores the SSL certificate in a temporary file and returns its path.
+    * 
+    * When making a request with an SSL certificate, curl requires that
+    * certificate to be in a file. This function stores the certificate in a 
+    * temporary file and returns its path.
+    * 
+    * 
+    * @see deleteSslCertificateTempFile
+    *   // This method will be called after the certificate has been used in order
+    *   // to clean up the file that was created.
+    * 
+    * @throws \Exception
+    *   // If the temp certificate file cannot be created or written
     * 
     * @param string $temp_path
     */
-    private function getSslCertificateAsTempFilePath( $temp_path = null ){
+    protected function createSslCertificateTempFile(){
         
-        $ssl_cert_data = $this->getSslCertificateData();
+        // If a certificate temp file has already been created, delete it
+            $this->deleteSslCertificateTempFile();
         
-        if( is_null( $temp_path ) ) $temp_path = sys_get_temp_dir();
         
-        $temp_filename = $temp_path . '/cws_pem_' . sha1( $ssl_cert_data );
+        // Gets certificate data
+            $ssl_cert_data = $this->getSslCertificateData();
+            
+            \Altumo\Validation\Strings::assertNonEmptyString( $ssl_cert_data );
         
-        if( is_readable( $temp_filename ) ){
-            return $temp_filename;
-        }
         
-        if( file_put_contents( $temp_filename, $this->getSslCertificateData()) === false ){
-            throw new Exception( 'Unable to write to temporary certificate file.' );
+        // Use system temp directory path
+            $temp_path = sys_get_temp_dir();
+            
+            
+        // Make a new filename for the certificate using its own hash and a random string
+            $temp_filename = $temp_path 
+                             . '/altumo_pem_' 
+                             . sha1( $ssl_cert_data )
+                             . '_' 
+                             . \Altumo\String\String::generateRandomString( 4 );
+            
+            
+        // Write the contents of the certificate to the temporary file
+            if( file_put_contents( $temp_filename, $this->getSslCertificateData() ) === false ){
+                
+                throw new \Exception( 'Unable to write to temporary certificate file.' );
+                
+            }
+            
+        $this->setSslCertificateTempFile( $temp_filename );
+            
+        return $temp_filename;
+        
+    }
+    
+    
+    /**
+    * Deletes the temporary ssl certificate file if one has been created.
+    * 
+    * If no file exists, the function returns.
+    * 
+    * @see createSslCertificateTempFile
+    * 
+    * @return void
+    */
+    protected function deleteSslCertificateTempFile(){
+        
+        $certificate_temp_file = $this->getSslCertificateTempFile();
+        
+        if( !is_null( $certificate_temp_file ) ){
+            
+            if( file_exists( $certificate_temp_file ) ){
+                
+                unlink( $certificate_temp_file );
+                
+            }
+
+            $this->setSslCertificateTempFile( null );  
+             
         }
         
     }
     
     
     /**
-    * Deletes the temp cookie file created by this request.
+    * Performs cleanup of files that might have been created for this request.
     * 
+    * Files that may need cleaning up are:
+    *   - cookie temp file
+    *   - ssl certificate temp file
+    * 
+    * @return void
     */
     public function __destruct(){
           
@@ -945,7 +1044,10 @@ class OutgoingHttpRequest{
         if( file_exists($this->getCookieFilename()) ){
             //unlink( $this->getCookieFilename() );
         }
-               
+        
+        // Delete the SSL temp certificate file if one exists
+            $this->deleteSslCertificateTempFile();
+
     }
     
     
