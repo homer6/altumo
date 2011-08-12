@@ -25,11 +25,11 @@ altumo.configuration = altumo.configuration || {};
 
 
 /**
- * Provides configuration storage for routing and other global applaication
- * settings.
- *
- * @constructor
- **/
+* Provides configuration storage for routing and other global applaication
+* settings.
+*
+* @constructor
+*/
 altumo.configuration.Config = function(){
     
     // Data storage

@@ -40,7 +40,7 @@ class Url{
     protected $password = null;
     protected $path = null;
     protected $query_string = null;         //after the question mark ?
-	protected $parameters = array();		//this is a duplicate of $query_string 
+    protected $parameters = array();		//this is a duplicate of $query_string 
 	                                          //for easy access and manipulation
     protected $anchor = null;               //after the hashmark #
     
@@ -173,8 +173,6 @@ class Url{
         }
 
     }
-    
-    
     
     
     /**
