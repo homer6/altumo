@@ -33,7 +33,7 @@ namespace Altumo\String;
 */
 class Url{
 
-    protected $scheme = null;               //http, https, ftp
+    protected $scheme = 'http';               //http, https, ftp
     protected $host = null;                 //a domain name or IP address
     protected $port = null;
     protected $user = null;
@@ -75,7 +75,7 @@ class Url{
     */
     protected function clearUrl(){
 
-        $scheme = null;
+        $scheme = 'http';
         $host = null;
         $port = null;
         $user = null;
@@ -655,14 +655,12 @@ class Url{
     /**
     * Returns this full URL as a string.
     * 
+    * 
     * @throws \Exception                    //if this URL is not valid
+    *
     * @return string
     */
     public function getUrl(){
-        
-        if( !$this->isValid() ){
-            throw new \Exception( 'This URL is invalid.' );
-        }
         
         $url_string = $this->getScheme();
         $url_string .= '://'; 
@@ -677,7 +675,14 @@ class Url{
         if( $this->hasAnchor() ){
             $url_string .= '#' . urlencode($this->getAnchor());
         }
+
         
+        $this->setFullUrl( $url_string );
+        
+        if( !$this->isValid() ){
+            throw new \Exception( 'This URL is invalid.' );
+        }
+
         return $url_string;
         
     }

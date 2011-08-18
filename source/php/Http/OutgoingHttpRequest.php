@@ -913,8 +913,8 @@ class OutgoingHttpRequest{
     */
     protected function getSslCertificateTempFile( ){
         
-        $this->ssl_cert_temp_file = $ssl_cert_temp_file;
-
+        return $this->ssl_cert_temp_file;
+        
     }
     
 
