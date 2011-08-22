@@ -43,7 +43,7 @@ class WorkingTree{
     * 
     * @return void
     */
-    static public function updateSubmodulesRecursively( $checkout_point ){
+    static public function updateSubmodulesRecursively(){
         
         `git submodule --update --recursive --init`;
         
