@@ -63,6 +63,31 @@ class History{
 
     
     /**
+    * Retrieves any commits posted (cronologically) after $from_hash and before 
+    * $until_hash that contain a log message matching the $regex_pattern given.
+    * 
+    * 
+    * @param mixed $regex_pattern
+    *   // a grep-style regular expression to match log messages against.
+    * 
+    * @param mixed $from_hash
+    *   // the commit hash to start from. The set used will be $from_hash until $until_hash    
+    *  
+    * @param mixed $until_hash
+    *   // defaults to HEAD
+    * 
+    * @return array
+    */
+    static public function getCommitsAfterMatching( $regex_pattern, $from_hash, $until_hash = 'HEAD' ){
+        
+        $git_log_output = `git log --pretty=oneline --date-order --grep="$regex_pattern" $from_hash..$until_hash`;
+        $revisions = self::parseOneLineFormat( $git_log_output );
+        return $revisions;
+            
+    }
+    
+    
+    /**
     * Parses the output from git log into an array.
     *  eg. git log --pretty=oneline
     * 
@@ -87,6 +112,8 @@ class History{
         return $revisions;
         
     }
+    
+    
     
     
 }  
