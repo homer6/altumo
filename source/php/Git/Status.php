@@ -89,16 +89,11 @@ class Status{
         $changed_items = array();
         
         if( preg_match_all( '/^.+?\\s(.*)$/m', $output, $changes, PREG_SET_ORDER ) ){
+            
             foreach( $changes  as $changed_item ){
-                
-                //TEMPORARY.. REMOVE ME.
-                    if( preg_match( '/sfAltumoPlugin/m', $changed_item[1] ) ){
-                        continue;
-                    }
-                
                 $changed_items[] = $changed_item[1];
-                
             }
+            
         }
         
         return $changed_items;
