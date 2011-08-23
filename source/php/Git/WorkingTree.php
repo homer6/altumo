@@ -21,19 +21,23 @@ namespace Altumo\Git;
 */
 class WorkingTree{
 
-
     /**
-    * Checkout a named branch or hash
+    * Checkout a named branch or hash. 
     * 
-    * Note:
-    *   This does not perform any error handling nor validation. If there
-    *   are errors checking out, they will be ignored.
+    * Command is executed with piped output.
+    * @see Altumo\Utils\Shell::runWithPipedOutput
     * 
+    * 
+    * @param bool $quiet
+    *   // Run command in quiet mode. (ommit output)
+    *
     * @return void
     */
-    static public function checkout( $checkout_point ){
+    static public function checkout( $checkout_point, $quiet = true ){
         
-        `git checkout $checkout_point`;
+        $command = "git checkout" . self::getQuietFlag($quiet) . $checkout_point;
+
+        \Altumo\Utils\Shell::runWithPipedOutput( $command );
         
     }    
 
@@ -41,14 +45,35 @@ class WorkingTree{
     /**
     * Updates submodules recursively
     * 
+    * 
+    * @param bool $quiet
+    *   // Run command in quiet mode. (ommit output)
+    * 
     * @return void
     */
-    static public function updateSubmodulesRecursively(){
-        
-        `git submodule --update --recursive --init`;
-        
-    }    
-    
-    
-}  
+    static public function updateSubmodulesRecursively( $quiet = true ){
 
+        $command = "git submodule" . self::getQuietFlag($quiet) . "update --recursive --init";
+
+        \Altumo\Utils\Shell::runWithPipedOutput( $command );
+        
+    }   
+    
+    
+    /**
+    * Returns " --quiet " (with spaces) if $quiet is true 
+    * or empty string otherwise.
+    * 
+    * @param bool $quiet
+    * 
+    * @return string
+    */
+    static protected function getQuietFlag( $quiet ){
+        
+        return $quiet
+            ? ' --quiet '
+            : '';
+            
+    } 
+    
+}

@@ -20,6 +20,7 @@ namespace Altumo\Git;
 * This class is used to retrieve the git revision history.
 * 
 * @author Steve Sperandeo <steve.sperandeo@altumo.com>
+* @author Juan Jaramillo <juan.jaramillo@altumo.com>
 */
 class History{
 
@@ -113,8 +114,4 @@ class History{
         
     }
     
-    
-    
-    
-}  
-
+}

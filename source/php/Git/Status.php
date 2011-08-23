@@ -13,9 +13,8 @@
 
 namespace Altumo\Git;
 
-
 /**
-* This class is used to retrieve the git status information.
+* This class is used for retrieving information about a Git working tree.
 * 
 * @author Juan Jaramillo <juan.jaramillo@altumo.com>
 */
@@ -82,7 +81,8 @@ class Status{
     * Parses the output of git-status into an array. Assumes the "porcelain"
     * option was used to generate the output.
     * 
-    * @param mixed $output
+    * @param string $output
+    *   // output from a git-status call to parse
     */
     static protected function parseStatusOutput( $output ){
         
