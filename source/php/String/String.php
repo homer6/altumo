@@ -219,4 +219,57 @@ class String{
     }
     
     
+    /**
+    * Truncates a string and appends $ellipsis to the truncated result.
+    * 
+    * It does not truncate individual words, and it ensures the total length
+    * of the resulting text (including $ellipsis) does not exceed $max_length
+    * 
+    * 
+    * @param string $text
+    *   // A string to truncate
+    * 
+    * @param int $max_length
+    *   // The resulting text cannot exceed this length
+    * 
+    * @param string $ellipsis
+    *   // The character that will be appended to the resulting text.
+    *  
+    * @param bool $truncate_words
+    *   // If true, words can be truncated to accommodate $max_length
+    *   // If false, the text will only be truncated in spaces and not mid-word
+    * 
+    *
+    * @returns string
+    *   // Tuncated text with $ellipsis appended
+    */
+    static public function getTruncatedText( $text, $max_length, $ellipsis = '...', $truncate_words = false ){
+
+        $parts = explode( ' ', $text );
+        
+        $output = '';
+        
+        // If $text has no spaces or if words can be truncated, simply truncate
+        // the string to max_length
+            if( (count($parts) == 1) || $truncate_words ){
+                
+                $output = substr( $text, 0, $max_length - strlen($ellipsis) );
+            
+        // Avoid truncating words   
+            } else {
+                
+                foreach( $parts as $part ){
+                    if( strlen( $output . ' ' . $part . $ellipsis ) > $max_length ){
+                        break;
+                    } else {
+                        $output .= ' ' . $part;
+                    }
+                }
+                
+            }
+        
+        return $output . $ellipsis;
+        
+    }
+    
 }
