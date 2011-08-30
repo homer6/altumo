@@ -268,7 +268,12 @@ class String{
                 
             }
         
-        return $output . $ellipsis;
+        
+        if( strlen( $text ) > $max_length ){
+            $output .= $ellipsis;
+        }
+        
+        return $output;
         
     }
     
