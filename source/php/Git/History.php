@@ -41,7 +41,7 @@ class History{
     static public function getLastCommit(){
         
         //get the revision log
-            $git_log_output = `git log --pretty=oneline -n 1`;
+            $git_log_output = `git log --no-color --pretty=oneline -n 1`;
             $revisions = self::parseOneLineFormat( $git_log_output );
             return $revisions;
         
@@ -70,6 +70,7 @@ class History{
     * 
     * @param mixed $regex_pattern
     *   // a grep-style regular expression to match log messages against.
+    *   // IMPORTANT: Do not use php-style regex (e.g. no slashes needed)
     * 
     * @param mixed $from_hash
     *   // the commit hash to start from. The set used will be $from_hash until $until_hash    
@@ -81,7 +82,8 @@ class History{
     */
     static public function getCommitsAfterMatching( $regex_pattern, $from_hash, $until_hash = 'HEAD' ){
         
-        $git_log_output = `git log --pretty=oneline --date-order --grep="$regex_pattern" $from_hash..$until_hash`;
+        $command = "git log --pretty=oneline --no-color --date-order --grep=\"{$regex_pattern}\" {$from_hash}..{$until_hash}";
+        $git_log_output = `$command`;
         $revisions = self::parseOneLineFormat( $git_log_output );
         return $revisions;
             
