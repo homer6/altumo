@@ -29,12 +29,19 @@ class Booleans{
     * Determines if this is a boolean value (or can be interpreted as one)
     * 
     * @param mixed $value
+    * @param string $exception_message  
+    *   //custom Exception message to throw. 
+    *     If null, default message will be used.
     * 
     * @return boolean                       //the value that it interpreted
     * @throw \Exception                     //if could not be interpreted as 
     *                                         boolean
     */
-    static public function assertLooseBoolean( $value ){
+    static public function assertLooseBoolean( $value, $exception_message = null ){
+        
+        if( is_null( $exception_message ) ){
+            $exception_message = 'Could not interpret as boolean.';
+        }
         
         if( is_bool($value) ){
             return $value;
@@ -81,7 +88,7 @@ class Booleans{
             
         }
         
-        throw new \Exception( 'Could not interpret as boolean.' );
+        throw new \Exception( $exception_message );
 
     }
     

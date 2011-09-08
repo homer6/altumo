@@ -37,10 +37,18 @@ class Arrays{
     *     sanitizeCsvArray( "" );   //returns array();
     * 
     * @param mixed $input
+    * @param string $exception_message  
+    *   //custom Exception message to throw. 
+    *     If null, default message will be used.
+    * 
     * @throws Exception //if $input is not null, a string or an array
     * @return array
     */
-    static public function sanitizeCsvArray( $input ){
+    static public function sanitizeCsvArray( $input, $exception_message = null ){
+        
+        if( is_null( $exception_message ) ){
+            $exception_message = '$input must be an array, string or null.';
+        }
         
         if( is_null($input) ){
             return array();
@@ -53,10 +61,10 @@ class Arrays{
         }
         
         if( !is_array($array) ){
-            throw new \Exception('$input must be an array, string or null.');
+            throw new \Exception( $exception_message );
         }
 
-        return self::removeEmptyElements($array);
+        return self::removeEmptyElements( $array );
         
     }
     
@@ -78,15 +86,19 @@ class Arrays{
     *     sanitizeCsvArrayPostitiveInteger( '1,2,,"hello",,3' );   //throws Exception
     * 
     * @param mixed $input
+    * @param string $exception_message  
+    *   //custom Exception message to throw. 
+    *     If null, default message will be used.
+    * 
     * @throws Exception //if $input is not null, a string or an array
     * @throws Exception //if $input contains elements that are not integers (or castable as integers)
     * @return array
     */
-    static public function sanitizeCsvArrayPostitiveInteger( $input ){
-        
+    static public function sanitizeCsvArrayPostitiveInteger( $input, $exception_message = null ){
+          
         $array = self::sanitizeCsvArray($input);
         foreach( $array as $key => $value ){
-            $array[$key] = \Altumo\Validation\Numerics::assertPositiveInteger($value);            
+            $array[$key] = \Altumo\Validation\Numerics::assertPositiveInteger( $value, $exception_message );            
         }
         
         return $array;

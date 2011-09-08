@@ -24,20 +24,28 @@ namespace Altumo\Validation;
 */
 class Numerics{
     
-    
+
     /**
     * Throws an exception if this is not an unsigned integer.
     * If this is a string, recasts as integer and returns it.
     * 
     * @param mixed $integer
+    * @param string $exception_message  
+    *   //custom Exception message to throw. 
+    *     If null, default message will be used.
+    * 
     * @throws Exception if argument passed is not an integer or can't be cast as an integer.
     * @return integer
     */
-    static public function assertUnsignedInteger( $integer ){
+    static public function assertUnsignedInteger( $integer, $exception_message = null ){
         
-        $integer = self::assertInteger( $integer );
+        if( is_null( $exception_message ) ){
+            $exception_message = 'Integer cannot be negative.';
+        }
+        
+        $integer = self::assertInteger( $integer, $exception_message );
         if( $integer < 0 ){
-            throw new \Exception( 'Integer cannot be negative.' );
+            throw new \Exception( $exception_message );
         }
         return $integer;
         
@@ -49,14 +57,22 @@ class Numerics{
     * If this is a string, recasts as integer and returns it.
     * 
     * @param mixed $integer
+    * @param string $exception_message  
+    *   //custom Exception message to throw. 
+    *     If null, default message will be used.
+    * 
     * @throws Exception if argument passed is not an integer or can't be cast as an integer.
     * @return integer
     */
-    static public function assertPositiveInteger( $integer ){
+    static public function assertPositiveInteger( $integer, $exception_message = null ){
         
-        $integer = self::assertInteger( $integer );
+        if( is_null( $exception_message ) ){
+            $exception_message = 'Integer cannot be negative or zero.';
+        }
+        
+        $integer = self::assertInteger( $integer, $exception_message );
         if( $integer <= 0 ){
-            throw new \Exception( 'Integer cannot be negative or zero.' );
+            throw new \Exception( $exception_message );
         }
         return $integer;
         
@@ -68,16 +84,24 @@ class Numerics{
     * If this is a string, recasts as integer and returns it.
     * 
     * @param mixed $integer
+    * @param string $exception_message  
+    *   //custom Exception message to throw. 
+    *     If null, default message will be used.
+    * 
     * @throws Exception if argument passed is not an integer or can't be cast as an integer.
     * @return integer
     */
-    static public function assertInteger( $integer ){
+    static public function assertInteger( $integer, $exception_message = null ){
+        
+        if( is_null( $exception_message ) ){
+            $exception_message = 'Value passed is not an integer.';
+        }
         
         if( is_integer($integer) ){
             return $integer;
         }
         if( !is_numeric($integer) || floor($integer) != $integer ){
-            throw new \Exception('Value passed is not an integer.');
+            throw new \Exception( $exception_message );
         }
         return (integer)$integer;
         
@@ -88,12 +112,16 @@ class Numerics{
     * Determines if this is an integer (or castable as one).
     * 
     * @param mixed $integer
+    * @param string $exception_message  
+    *   //custom Exception message to throw. 
+    *     If null, default message will be used.
+    * 
     * @return boolean
     */
-    static public function isInteger( $integer ){
+    static public function isInteger( $integer, $exception_message = null ){
         
         try{
-            self::assertInteger($integer);
+            self::assertInteger( $integer, $exception_message );
             return true;
         }catch( \Exception $e ){
             return false;
@@ -107,14 +135,22 @@ class Numerics{
     * If this is a string, recasts as double and returns it.
     * 
     * @param mixed $double
+    * @param string $exception_message  
+    *   //custom Exception message to throw. 
+    *     If null, default message will be used.
+    * 
     * @throws Exception if argument passed is not a double or can't be cast as a double.
     * @return double
     */
-    static public function assertUnsignedDouble( $double ){
+    static public function assertUnsignedDouble( $double, $exception_message = null ){
         
-        $double = self::assertDouble( $double );
+        if( is_null( $exception_message ) ){
+            $exception_message = 'Double cannot be negative.';
+        }
+        
+        $double = self::assertDouble( $double, $exception_message );
         if( $double < 0.0 ){
-            throw new \Exception( 'Double cannot be negative.' );
+            throw new \Exception( $exception_message );
         }
         return $double;
         
@@ -126,14 +162,22 @@ class Numerics{
     * If this is a string, recasts as double and returns it.
     * 
     * @param mixed $double
+    * @param string $exception_message  
+    *   //custom Exception message to throw. 
+    *     If null, default message will be used.
+    * 
     * @throws Exception if argument passed is not a double or can't be cast as a double.
     * @return double
     */
-    static public function assertPositiveDouble( $double ){
+    static public function assertPositiveDouble( $double, $exception_message = null ){
         
-        $double = self::assertDouble( $double );
+        if( is_null( $exception_message ) ){
+            $exception_message = 'Double cannot be negative or zero.';
+        }
+        
+        $double = self::assertDouble( $double, $exception_message );
         if( $double <= 0.0 ){
-            throw new \Exception( 'Double cannot be negative or zero.' );
+            throw new \Exception( $exception_message );
         }
         return $double;
         
@@ -145,20 +189,28 @@ class Numerics{
     * If this is a string, recasts as double and returns it.
     * 
     * @param mixed $double
+    * @param string $exception_message  
+    *   //custom Exception message to throw. 
+    *     If null, default message will be used.
+    * 
     * @throws Exception if argument passed is not a double or can't be cast as a double.
     * @return double
     */
-    static public function assertDouble( $double ){
+    static public function assertDouble( $double, $exception_message = null ){
+        
+        if( is_null( $exception_message ) ){
+            $exception_message = 'Value passed is not a double.';
+        }
         
         if( is_double($double) ){
             return $double;
         }
         if( !is_numeric($double) ){
-            throw new \Exception('Value passed is not a double.');
+            throw new \Exception( $exception_message );
         }
         return (double)$double;
         
     }
-    
-    
+
+
 }
