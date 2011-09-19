@@ -35,7 +35,7 @@ class Strings{
     *     If null, default message will be used.
     * 
     * @throws Exception //if argument passed is not a non-empty string or can't 
-    *                     be cast as an integer.
+    *                     be cast as a string
     * @return string
     */
     static public function assertNonEmptyString( $string, $exception_message = null ){
