@@ -23,7 +23,7 @@ namespace Altumo\Utils;
 * 
 * @author Steve Sperandeo <steve.sperandeo@altumo.com>
 */
-class Date extends \sfDate{
+class Date extends sfDate\sfDate{
     
     protected $time_zone = null;
     
@@ -50,6 +50,15 @@ class Date extends \sfDate{
         return $this->time_zone;
         
     }
+    
+    /*
+    public function __set_state( $array ){
+        echo (object) $array;
+    }
+    */
+        
+      // 'time_zone' => NULL,\n   'ts' => 1316456162,\n   'init' => 1316456162,\n))
+    
         
     
 }
