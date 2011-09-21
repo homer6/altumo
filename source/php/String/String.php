@@ -129,6 +129,40 @@ class String{
     
     
     /**
+    * Replaces spaces with hyphens and converts to lowercase
+    * eg.
+    *   How Are You
+    * becomes
+    *   how-are-you
+    * 
+    * @param string $string
+    * @return string
+    */
+    public static function getLowercaseHypenatedString( $string, $hyphen_char = "-" ){
+        
+        return strtolower( str_replace(" ", $hyphen_char, $string) );
+        
+    }
+
+    
+    /**
+    * Replaces any multiple consecutive spaces with a single space.
+    * eg.
+    *   How    Are    You
+    * becomes
+    *   How Are You
+    * 
+    * @param string $string
+    * @return string
+    */
+    public static function getSingleSpacedString( $string ){
+        
+        return preg_replace('/\\s+/', ' ', $string);
+        
+    }
+        
+    
+    /**
     * Generates a string $number_of_chars long with the $character_pool as potential characters.
     * 
     * @param integer $number_of_chars
@@ -181,6 +215,31 @@ class String{
     
     
     /**
+    * Generates a url slug string from the supplied string.
+    * eg.
+    *   _How Are You_
+    * becomes
+    *   how-are-you
+    * 
+    * @param string $string
+    * @return string
+    */    
+    static public function generateUrlSlug( $string ){
+        
+        $string = self::cleanString( $string, '-_a-zA-Z0-9' );
+        
+        $string = preg_replace( '/^[-_ ]*(.*?)[-_ ]*$/', '\\1', $string );
+
+        return self::getLowercaseHypenatedString(
+                    self::getSingleSpacedString(
+                        self::getAlphaNumSpaceString( $string ) 
+                    )
+               );
+        
+    }
+    
+    
+    /**
     * Formats a number into a human readable string.
     * 
     * eg. 1000
@@ -218,6 +277,33 @@ class String{
         
     }
     
+    
+    /**
+    * Removes anything that is not a letter, number or space from the given
+    * string.
+    * 
+    * 
+    * @param string $string
+    * @return string
+    */
+    public static function getAlphaNumSpaceString( $string  ){
+        
+        return self::cleanString( $string, 'a-zA-Z0-9\\s' );
+        
+    }
+    
+    
+    /**
+    * @desc Removes (from a string) anything that doesn't match the (regex-compatible) character classes given
+    * @param string $string string
+    * @param string $regex_match_classes preg_replace compatible character class e.g. a-zA-Z0-9 will remove anything that is NOT a letter or a number.
+    */
+    public static function cleanString( $string, $regex_match_classes = 'a-zA-Z0-9' ){
+        
+        return preg_replace("/([^{$regex_match_classes}])/", '', $string);
+        
+    }
+        
     
     /**
     * Truncates a string and appends $ellipsis to the truncated result.
@@ -276,5 +362,6 @@ class String{
         return $output;
         
     }
+    
     
 }
