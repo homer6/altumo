@@ -189,6 +189,8 @@ class String{
     * Adds the ? to the beginning.
     * Returns an empty string if $parameters is empty.
     * This method will url_encode the values, but not the keys.
+    * If an array is supplied as one of the parameter values, it will
+    * delimit each value in that array with a comma.
     * 
     * @param array $parameters
     * @return string
@@ -200,7 +202,11 @@ class String{
         //combine and encode the parameters
             $combined_parameters = array();            
             foreach( $parameters as $key => $parameter ){
-                $combined_parameters[] = $key . '=' . urlencode($parameter);
+                if( is_array($parameter) ){
+                    $combined_parameters[] = $key . '=' . urlencode( implode(',', $parameter) );                    
+                }else{
+                    $combined_parameters[] = $key . '=' . urlencode( $parameter );
+                }
             }
         
         //build the request url

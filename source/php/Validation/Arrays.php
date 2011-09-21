@@ -95,12 +95,19 @@ class Arrays{
     * @return array
     */
     static public function sanitizeCsvArrayPostitiveInteger( $input, $exception_message = null ){
-          
-        $array = self::sanitizeCsvArray($input);
-        foreach( $array as $key => $value ){
-            $array[$key] = \Altumo\Validation\Numerics::assertPositiveInteger( $value, $exception_message );            
-        }
-        
+                    
+        //accept a single integer
+            try{
+                $number = \Altumo\Validation\Numerics::assertPositiveInteger( $input, $exception_message ); 
+                return array( $number );
+            }catch( \Exception $e ){}
+
+        //or a collection of them
+            $array = self::sanitizeCsvArray($input);
+                foreach( $array as $key => $value ){
+                $array[$key] = \Altumo\Validation\Numerics::assertPositiveInteger( $value, $exception_message );            
+            }
+
         return $array;
         
     }
