@@ -132,4 +132,39 @@ class Strings{
     }
 
     
+    /**
+    * Throws an exception if this is not a string (or castable as one).
+    * Also throws an exception if this string contains characters other than
+    * alpha-numeric, hyphens or underscores.
+    * 
+    * @param mixed $string
+    * @param string $exception_message  
+    *   //custom Exception message to throw. If null, default message will be 
+    *     used.
+    * 
+    * @throws Exception 
+    *   //if argument passed is not a string
+    * 
+    * @throws Exception 
+    *   //if argument passed contains characters other than alpha-numeric, 
+    *     hyphens or underscores.
+    * 
+    * @return string
+    */
+    static public function assertStringAlphaNumericHyphenUnderscore( $string, $exception_message = null ){
+        
+        self::assertString( $string, $exception_message );
+       
+        if( preg_match('/[-_a-zA-Z0-9]/', $string) ){
+            return $string;
+        }else{
+            if( is_null($exception_message) ){
+                $exception_message = 'String contained characters other than alpha-numeric, hyphens or underscores.';
+            }
+            throw new \Exception( $exception_message );
+        }
+        
+    }
+    
+    
 }
