@@ -24,7 +24,7 @@ namespace Altumo\Utils\sfDate;
  * @author		Stephen Riesenberg <sjohnr@gmail.com>
  * @version		SVN: $Id$
  */
-class sfDateTimeException extends sfException
+class sfDateTimeException extends \Exception
 {
 	/**
 	 * Class constructor.

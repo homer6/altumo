@@ -677,13 +677,13 @@ class sfDate
 	 *
 	 * @return	sfDate	the modified object, for chainability
 	 */
-	public function __call($method, $arguments)
-	{
-		$callable = array('sfTime', $method);
+	public function __call( $method, $arguments ){
+                
+		$callable = array( __NAMESPACE__ . '\\sfTime', $method);
 		
 		if (!is_callable($callable))
 		{
-			throw new sfDateTimeException(sprintf('Call to undefined function: %s::%s', 'sfDate', $method));
+			throw new sfDateTimeException(sprintf('Call to undefined function: %s::%s', __NAMESPACE__ . '\\sfDate', $method));
 		}
 		
 		array_unshift($arguments, $this->ts);
@@ -691,5 +691,8 @@ class sfDate
 		$this->ts = call_user_func_array($callable, $arguments);
 		
 		return $this;
+        
 	}
+    
+    
 }
