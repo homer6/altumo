@@ -232,15 +232,15 @@ class String{
     */    
     static public function generateUrlSlug( $string ){
         
-        $string = self::cleanString( $string, '-_a-zA-Z0-9' );
+        $string = self::cleanString( $string, '-_a-zA-Z0-9 ' );
         
         $string = preg_replace( '/^[-_ ]*(.*?)[-_ ]*$/', '\\1', $string );
-
-        return self::getLowercaseHypenatedString(
-                    self::getSingleSpacedString(
-                        self::getAlphaNumSpaceString( $string ) 
-                    )
-               );
+        
+        $string = self::getSingleSpacedString( $string );
+        
+        $string = self::getLowercaseHypenatedString( $string );
+        
+        return $string;
         
     }
     
@@ -350,10 +350,11 @@ class String{
         // Avoid truncating words   
             } else {
                 
+                $output = array_shift( $parts );               
                 foreach( $parts as $part ){
                     if( strlen( $output . ' ' . $part . $ellipsis ) > $max_length ){
                         break;
-                    } else {
+                    }else{
                         $output .= ' ' . $part;
                     }
                 }
