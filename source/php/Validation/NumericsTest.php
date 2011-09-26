@@ -25,7 +25,7 @@ class NumericsTest extends \Altumo\Test\UnitTest{
 
 
     /**
-    * Tests String::generateUrlSlug()
+    * Tests Numerics::assertInteger()
     * 
     */
     public function testAssertInteger(){
@@ -53,6 +53,51 @@ class NumericsTest extends \Altumo\Test\UnitTest{
         $input = 0;
         $output = \Altumo\Validation\Numerics::assertInteger( $input );
         $this->assertTrue( is_integer($output) );
+        
+    }
+   
+
+    /**
+    * Tests Numerics::assertPositiveInteger()
+    * 
+    */
+    public function testAssertPossitiveInteger(){
+               
+        $input = '7215';
+        $output = \Altumo\Validation\Numerics::assertPositiveInteger( $input );
+        $this->assertTrue( is_integer($output) );               
+        
+        $input = 7215.0;
+        $output = \Altumo\Validation\Numerics::assertPositiveInteger( $input );
+        $this->assertTrue( is_integer($output) );                
+        
+        $input = (double)7215;
+        $output = \Altumo\Validation\Numerics::assertPositiveInteger( $input );
+        $this->assertTrue( is_integer($output) );          
+        
+        $input = (float)7215;
+        $output = \Altumo\Validation\Numerics::assertPositiveInteger( $input );
+        $this->assertTrue( is_integer($output) );               
+        
+        $input = 7215;
+        $output = \Altumo\Validation\Numerics::assertPositiveInteger( $input );
+        $this->assertTrue( is_integer($output) );               
+        
+        try{
+            $input = 72.56;
+            $output = \Altumo\Validation\Numerics::assertPositiveInteger( $input );
+            $this->assertTrue( false ); 
+        }catch( \Exception $e ){
+            $this->assertTrue( true );               
+        }          
+        
+        try{
+            $input = 0;
+            $output = \Altumo\Validation\Numerics::assertPositiveInteger( $input );
+            $this->assertTrue( false ); 
+        }catch( \Exception $e ){
+            $this->assertTrue( true );               
+        }
         
     }
    
