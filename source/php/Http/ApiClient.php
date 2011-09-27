@@ -286,12 +286,8 @@ class ApiClient{
 
         $url_suffix = '';
         if( !is_null($ids) ){
-            if( is_array($ids) ){
-                $ids = \Altumo\Validation\Arrays::sanitizeCsvArrayPostitiveInteger( $ids );
-                return '/' . implode(',', $ids);
-            }else{
-                throw new \Exception('IDs must be an array.');
-            }
+            $ids = \Altumo\Validation\Arrays::sanitizeCsvArrayPostitiveInteger( $ids );
+            return '/' . implode(',', $ids);
         }
 
         return '';
