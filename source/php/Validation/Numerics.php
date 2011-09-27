@@ -100,6 +100,9 @@ class Numerics{
         if( is_integer($integer) ){
             return $integer;
         }
+        
+        $integer = (string)$integer;
+        
         if( !is_numeric($integer) || floor($integer) != $integer ){
             throw new \Exception( $exception_message );
         }

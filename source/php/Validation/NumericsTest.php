@@ -23,7 +23,7 @@ namespace Altumo\Test;
 */
 class NumericsTest extends \Altumo\Test\UnitTest{
 
-
+    
     /**
     * Tests Numerics::assertInteger()
     * 
@@ -89,7 +89,7 @@ class NumericsTest extends \Altumo\Test\UnitTest{
             $this->assertTrue( false ); 
         }catch( \Exception $e ){
             $this->assertTrue( true );               
-        }          
+        }  
         
         try{
             $input = 0;
