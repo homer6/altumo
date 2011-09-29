@@ -350,20 +350,30 @@ class XmlElement{
     /**
     * Returns the contents of this xml element as a string.
     * 
-    * @param boolean $pretty  //formats the xml string in a human-readable version
-    * @return string  //encoded as utf-8
+    * @param boolean $pretty  
+    *   //formats the xml string in a human-readable version
+    * 
+    * @param boolean $include_xml_declaration  
+    *   //whether this will include the <?xml version="1.0"?> declaration at the 
+    *     top of the element. Defaults to true.
+    * 
+    * @return string                        //encoded as utf-8
     */
-    public function getXmlAsString( $pretty = false ){
+    public function getXmlAsString( $pretty = false, $include_xml_declaration = true ){
         
         $this->assertLoaded();
         $xml = $this->getXmlElement()->asXML();
-        $xml_string = str_replace( '<?xml version="1.0"?>', '<?xml version="1.0" encoding="UTF-8"?>', $xml);
-        
+        $xml_string = str_replace( '<?xml version="1.0"?>', '<?xml version="1.0" encoding="UTF-8"?>', $xml );
+                
         if( $pretty ){
-            $xml_string = self::prettyFormatXmlString($xml_string);
+            $xml_string = self::prettyFormatXmlString( $xml_string );
         }
         
-        return utf8_encode($xml_string);
+        if( !$include_xml_declaration ){
+            $xml_string = preg_replace( '/<\\?xml version="1\\.0" encoding="UTF-8"\\?>(\\r?\\n)?/', '', $xml_string );
+        }
+        
+        return utf8_encode( $xml_string );
         
     }
     
