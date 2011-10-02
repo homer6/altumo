@@ -20,6 +20,8 @@ Dependencies
      - Extensions:
        - CURL
        - mongodb client
+       - libxml (--enable-libxml)
+       - simplexml
   - "Altumo Packages" require mongodb 1.2+
   - Classes under the Symfony_1_4 directory depend on Symfony 1.4
 
