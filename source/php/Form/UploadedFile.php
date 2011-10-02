@@ -327,7 +327,9 @@ class UploadedFile{
         
         $uploaded_files = array();
         
-        if( empty($_FILES) ) return;
+        if( empty($_FILES) ){
+            return $uploaded_files;
+        }
         
         $forms = array_keys( $_FILES );
         $first_form = reset($forms);
