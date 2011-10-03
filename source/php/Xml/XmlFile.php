@@ -317,13 +317,16 @@ abstract class XmlFile{
     * @param boolean $write                 //whether this method should write 
     *                                         the contents before closing.  
     *                                         Defaults to yes.
+    * 
+    * @param boolean $format_xml            //whether the xml will be "pretty"
+    * 
     */
-    public function closeFile( $write = true ){
+    public function closeFile( $write = true, $format_xml = true ){
         
         if( $this->isFileOpen() ){
             
             if( !$this->isReadOnly() ){
-                $this->writeToFile();
+                $this->writeToFile( $format_xml );
             }
             
             fclose( $this->getFilePointer() ); 
@@ -341,12 +344,13 @@ abstract class XmlFile{
     /**
     * Saves the contents to the file.
     * 
+    * @param boolean $format_xml            //whether the xml will be "pretty"
     */
-    public function writeToFile(){
+    public function writeToFile( $format_xml = true ){
 
         $this->assertFileOpen();
         $this->assertFileWritable();
-        $file_contents = $this->getXmlRoot()->getXmlAsString(true);
+        $file_contents = $this->getXmlRoot()->getXmlAsString( $format_xml );
         $file_pointer = $this->getFilePointer();
         ftruncate( $file_pointer, 0 );
         rewind( $file_pointer );
