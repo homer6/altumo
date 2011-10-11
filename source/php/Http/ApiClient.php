@@ -325,7 +325,11 @@ class ApiClient{
     public function dumpLastResponse(){
 
         $args = func_get_args();
-        \Altumo\Utils\Debug::dump( $this->last_response, $args );
+        if( !empty($args) ){
+            \Altumo\Utils\Debug::dump( $this->last_response, $args );
+        }else{
+            \Altumo\Utils\Debug::dump( $this->last_response );
+        }                
 
     }
 
