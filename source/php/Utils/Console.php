@@ -114,6 +114,8 @@ class Console{
     * Outputs (to the console log) the variables passed to this function in a 
     * format like var_dump.
     * This is a polyvaradic function.  You can pass many parameters.
+    * 
+    * Defaults to /tmp/console.log
     *    
     * @throws \Exception                    //if dump() coun't write to the log 
     *                                         file couldn't write
