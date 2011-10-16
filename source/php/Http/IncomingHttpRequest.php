@@ -133,6 +133,34 @@ class IncomingHttpRequest{
         return $this->message_body;
         
     }
+    
+    
+    /**
+    * Determines whether the current request is using HTTPS.
+    * 
+    * @return boolean
+    */
+    static public function isSecure(){
+    
+        if( array_key_exists('HTTP_X_FORWARDED_PROTO', $_SERVER) ){
+            $http_x_forwarded_proto = $_SERVER[ 'HTTP_X_FORWARDED_PROTO' ];
+        }else{
+            $http_x_forwarded_proto = null;
+        }
+    
+        if( array_key_exists('HTTP_X_FORWARDED_PORT', $_SERVER) ){
+            $http_x_forwarded_port = $_SERVER[ 'HTTP_X_FORWARDED_PROTO' ];
+        }else{
+            $http_x_forwarded_port = null;
+        }
+        
+        if( $_SERVER['SERVER_PORT'] != 443 && $http_x_forwarded_proto != 'https' && $http_x_forwarded_port != 443 ){
+            return false;
+        }
+        
+        return true;
+        
+    }
 
 
 }
