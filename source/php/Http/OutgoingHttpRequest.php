@@ -112,7 +112,14 @@ class OutgoingHttpRequest{
     * Sends the HTTP Request and returns the response as a string.
     * 
     * @param boolean $return_response_header
+    *   //determines whether the response (the string return from this method) 
+    *     will contain the response http headers
+    * 
     * @param boolean $populate_curl_info
+    *   //determines whether curl's debug information will be saved. After
+    *     calling $client->send( false, true ), you can call 
+    *     $client->getCurlInfo() to get curl debug information.
+    * 
     * @throws \Exception on error.
     * @return string
     */

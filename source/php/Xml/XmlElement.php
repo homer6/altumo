@@ -39,7 +39,7 @@ class XmlElement{
     * 
     * @param string|\SimpleXMLElement $xml_string
     * @throws \Exception if SimpleXML is not loaded 
-    * @return XmlElement
+    * @return \Altumo\Xml\XmlElement
     */    
     public function __construct( $xml_string = null ){
               
@@ -159,6 +159,7 @@ class XmlElement{
     * @param string $filename
     * @throws \Exception if file does not exist
     * @throws \Exception if contents are not valid XML
+    * @return \Altumo\Xml\XmlElement
     */
     public function loadFromFile( $filename ){
         
@@ -169,6 +170,8 @@ class XmlElement{
         $contents = file_get_contents($filename);
         $this->setContentsByString($contents);
         
+        return $this;
+        
     }
     
     
@@ -177,6 +180,7 @@ class XmlElement{
     * 
     * @param string $xml_string
     * @throws \Exception on parse error
+    * @return \Altumo\Xml\XmlElement
     */   
     public function setContentsByString( $xml_contents ){
         
@@ -203,6 +207,8 @@ class XmlElement{
         if( !$this->isValid() ){
             throw new \Exception('XML Failed to parse.');
         }
+        
+        return $this;
                  
     }
     
@@ -211,6 +217,7 @@ class XmlElement{
     * Creates a XmlElement
     * 
     * @param string $xml_string
+    * @return \Altumo\Xml\XmlElement
     */   
     public function setContentsBySimpleXMLElement( $xml_contents ){
         
@@ -221,7 +228,8 @@ class XmlElement{
         
         $this->xml_element = $xml_contents;
         $this->setLoaded(true);
-        $this->setValid(true);        
+        $this->setValid(true);
+        return $this;    
                  
     }
     
@@ -350,20 +358,30 @@ class XmlElement{
     /**
     * Returns the contents of this xml element as a string.
     * 
-    * @param boolean $pretty  //formats the xml string in a human-readable version
-    * @return string  //encoded as utf-8
+    * @param boolean $pretty  
+    *   //formats the xml string in a human-readable version
+    * 
+    * @param boolean $include_xml_declaration  
+    *   //whether this will include the <?xml version="1.0"?> declaration at the 
+    *     top of the element. Defaults to true.
+    * 
+    * @return string                        //encoded as utf-8
     */
-    public function getXmlAsString( $pretty = false ){
+    public function getXmlAsString( $pretty = false, $include_xml_declaration = true ){
         
         $this->assertLoaded();
         $xml = $this->getXmlElement()->asXML();
-        $xml_string = str_replace( '<?xml version="1.0"?>', '<?xml version="1.0" encoding="UTF-8"?>', $xml);
-        
+        $xml_string = str_replace( '<?xml version="1.0"?>', '<?xml version="1.0" encoding="UTF-8"?>', $xml );
+                
         if( $pretty ){
-            $xml_string = self::prettyFormatXmlString($xml_string);
+            $xml_string = self::prettyFormatXmlString( $xml_string );
         }
         
-        return utf8_encode($xml_string);
+        if( !$include_xml_declaration ){
+            $xml_string = preg_replace( '/<\\?xml version="1\\.0" encoding="UTF-8"\\?>(\\r?\\n)?/', '', $xml_string );
+        }
+        
+        return utf8_encode( $xml_string );
         
     }
     
@@ -374,7 +392,7 @@ class XmlElement{
     * @param string $name
     * @param string $value
     * @param string $namespace
-    * @return XmlElement
+    * @return \Altumo\Xml\XmlElement
     */
     public function addAttribute( $name, $value, $namespace = null ){
         
@@ -391,16 +409,61 @@ class XmlElement{
     * @param string $name
     * @param string $value
     * @param string $namespace
-    * @return XmlElement
+    * @return \Altumo\Xml\XmlElement
     */
     public function addChild( $name, $value = null, $namespace = null ){
         
         $this->assertLoaded();
+        /*
+        if( is_string($value) ){
+            //$value = str_replace( '&nbsp;', '&#32;', $value ); 
+            //$value = htmlentities( $value , ENT_COMPAT | ENT_HTML401 );
+        }*/
         $child = $this->getXmlElement()->addChild( $name, $value, $namespace );
+        
         return new XmlElement($child);
                 
     }
     
+    
+    /** 
+    * Add CDATA text in a node 
+    * @param string $cdata_text The CDATA value  to add
+    * 
+    * @author Alexandre FERAUD
+    * @see http://www.php.net/manual/en/simplexmlelement.addchild.php
+    */ 
+    protected function addCdata( $cdata_text ){
+        
+        $node = dom_import_simplexml( $this->getXmlElement() );
+        $owner_document = $node->ownerDocument; 
+        $node->appendChild( $owner_document->createCDATASection($cdata_text) );
+        
+    } 
+
+    
+    /** 
+    * Create a child element with CDATA value.
+    * 
+    * @param string $name                   
+    *   //The name of the child element to add. 
+    * 
+    * @param string $cdata_text 
+    *   //The CDATA value of the child element.
+    * 
+    * @author Alexandre FERAUD
+    * @see http://www.php.net/manual/en/simplexmlelement.addchild.php
+    * 
+    * @return \Altumo\Xml\XmlElement
+    */ 
+    public function addChildCdata( $name, $cdata_text, $namespace = null ){
+        
+        $child = $this->addChild( $name, null, $namespace );
+        $child->addCdata( $cdata_text );
+        return $this;
+        
+    } 
+
     
     /**
     * Formats the xml string provided as a pretty output.

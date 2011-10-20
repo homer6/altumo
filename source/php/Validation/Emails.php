@@ -48,7 +48,7 @@ class Emails{
         if( preg_match('/([A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4})/i', $email_address, $matches) ){
             //sanitize by using the first capturing group
                 $email_address = $matches[1];
-        } else {
+        }else{
             throw new \Exception( $exception_message );
         }
         
