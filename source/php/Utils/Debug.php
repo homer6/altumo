@@ -32,7 +32,7 @@ class Debug {
     static public function trace( $exit = true ){
         
         echo "<pre>";
-        $exception = new Exception();
+        $exception = new \Exception();
         
         echo $exception->getTraceAsString();
         
