@@ -118,7 +118,7 @@ class TestSuite{
                 }
                     
                 if( method_exists( $unit_test, 'tearDown' ) ){
-                    $unit_test->setup();
+                    $unit_test->tearDown();
                 }
                 
                 $this->output( "\n" );
