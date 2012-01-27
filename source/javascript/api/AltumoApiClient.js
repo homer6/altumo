@@ -31,6 +31,7 @@ goog.provide( 'altumo.api.AltumoApiClient' );
 * 
 * @author Juan Jaramillo <juan.jaramillo@altumo.com>
 */
+altumo = altumo || {};
 altumo.api = altumo.api || {};
 
 
