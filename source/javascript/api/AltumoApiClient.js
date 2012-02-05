@@ -2,14 +2,10 @@
 * This file is part of the Altumo library.
 * 
 * (c) Steve Sperandeo <steve.sperandeo@altumo.com>
-* (c) Juan Jaramillo <juan.jaramillo@altumo.com>
 *
 * For the full copyright and license information, please view the LICENSE
 * file that was distributed with this source code.
 */
-
-
-
 
 goog.provide( 'altumo.api' );
 goog.provide( 'altumo.api.AltumoApiClient' );
@@ -17,9 +13,6 @@ goog.provide( 'altumo.api.AltumoApiClient' );
 
 /**
 * @fileoverview Base API Client
-* 
-* 
-* 
 */
 
 
