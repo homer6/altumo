@@ -13,7 +13,7 @@ goog.provide( 'altumo.view.View' );
 */
 
 altumo = altumo || {};
-altumo.model = altumo.view || {};
+altumo.view = altumo.view || {};
 
 /**
  * Provides a base View class that application views should extend.
@@ -36,9 +36,9 @@ altumo.view.View = Backbone.View.extend({
         // If this view has a model, bind it to render.
         if( this.model ){
             this.model.bind( "change", this.render, this );
-        }     
+        }
 
-    },
+    }
     
     
 });
