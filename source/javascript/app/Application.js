@@ -57,7 +57,7 @@ altumo.app.Application.prototype.init = function( options ){
 /**
  * Gets the Application View, creates a new one if one doesn't exist.
  * 
- * @return {Backbone.View.view}
+ * @return {altumo.view.View}
  */
 altumo.app.Application.prototype.getView = function(){
     
@@ -75,10 +75,46 @@ altumo.app.Application.prototype.getView = function(){
  * This method is to be overridden by your implementation.
  * 
  * @protected
- * @return {Backbone.View.view}
+ * @return {altumo.view.View}
  */
 altumo.app.Application.prototype.createView = function(){
     
     throw "Application must implement createView";
+    
+};
+
+
+/**
+ * Gets the Router, creates a new one if one doesn't exist.
+ * 
+ * @return {altumo.router.Router}
+ */
+altumo.app.Application.prototype.getRouter = function(){
+    
+    if( !this.router ){
+        
+        // create a new router
+            this.router = this.createRouter();
+        
+        // start tracking history
+            Backbone.history.start({pushState: true});
+
+    }
+
+    return this.router;
+
+};
+
+
+/**
+ * Creates and returns a new instance of View to be used as the app view.
+ * This method is to be overridden by your implementation.
+ * 
+ * @protected
+ * @return {altumo.router.Router}
+ */
+altumo.app.Application.prototype.createRouter = function(){
+    
+    throw "Application must implement createRouter";
     
 };
