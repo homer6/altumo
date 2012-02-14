@@ -224,26 +224,25 @@ class Arrays{
     */
     static public function getValueIfSet( $array, $key, $default = null ){
 
-        //validate
+        // $array must be an array
             if( !is_array($array) ){
                 throw new \Exception('The first parameter must be an array.');
             }            
 
+        // $key must be a non-empty string
             try {
                 \Altumo\Validation\Strings::assertNonEmptyString( $key );
             } catch ( \Exception $e ){
                 throw new \Exception( 'The second parameter must be a non-empty string.' );
             }
 
-
-        // Retrieve Value   
-            if( isset($array[$key]) ){
+        // get value by key, if it exists
+            if( array_key_exists($key, $array) ){
                 return $array[$key];
             }
 
-
         return $default;
-        
+
     }
     
     
@@ -278,7 +277,7 @@ class Arrays{
             
             
         // If key is set, call apply function
-            if( isset( $array[$key] ) ){
+            if( array_key_exists($key, $array) ){
                 return call_user_func( $callback, $array[$key] );
             }
         

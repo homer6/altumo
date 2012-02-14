@@ -25,19 +25,27 @@ altumo.model = altumo.model || {};
  */
 altumo.model.Model = Backbone.Model.extend({
     
+    urlRoot: altumo.config.api_route,
+    
     /**
     * Returns the api url that will be called to interact with this resource.
     * @return {string} The api route for this resource.
     */
     url: function() {
         
-        var api_route = ( altumo.config.api_route || '/api' );
+        var api_route = ( this.urlRoot || '/api' );
         
         if( api_route.charAt(api_route.length-1) != '/' ){
             api_route += '/';
         }
         
-        return  api_route + this.resourceName;
+        api_route += this.resourceName;
+        
+        if( this.id ){
+            api_route += '/' + this.id;
+        }
+        
+        return  api_route;
 
     },
     
@@ -45,16 +53,50 @@ altumo.model.Model = Backbone.Model.extend({
     /**
     * Parses the response received from the API for this resource.
     * @this altumo.model.Model
-    * @param response
+    * @param {object} response
     */
     parse: function( response ){
-        
-        // Validate response
-            if( !response[this.resourcePluralName] || !response[this.resourcePluralName][0] ){
-                this.trigger( 'error', this, "Unexpected response, resource not found by name" );
+
+        // If this is an API response, parse it as such
+            if( this.isAltumoApiResponse(response) ){
+                
+                if( response[this.resourcePluralName][0] ){
+                    return response[this.resourcePluralName][0];
+                }
+
+                return [];
+                
             }
             
-        return response[this.resourcePluralName][0];
+        // If this is data pased from a collection render operation, parse parse
+        // individual object
+            if( typeof(response) == 'object' ){
+                return response;
+            }
+
+        this.trigger( 'error', this, "Unexpected response." );
+
+    },
+    
+    
+    /**
+    * Returns true if a response object originated from an Altumo API response.
+    * @protected
+    * 
+    * @param {object} response 
+    * @return {bool}
+    */
+    isAltumoApiResponse: function( response ){
+        
+        // Look for required altumo API parameters and the presense of the resource
+        // name in plural within the response.
+        
+        if( response['has_many_pages'] != undefined
+            && response['total_results'] != undefined
+            && response[this.resourcePluralName] != undefined
+        ) return true;
+
+        return false;
 
     }
     
