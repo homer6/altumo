@@ -37,7 +37,7 @@ class Objects {
     *                                     name of $object, if $object is not an
     *                                     Object, or if $class_name is not a string.
     * 
-    * @return void
+    * @return mixed
     */
     static public function assertObjectClass( &$object, $class_name, $exception_message = null ){
 
@@ -56,6 +56,8 @@ class Objects {
         if( !is_object($object) || ( get_class($object) != $class_name ) ){
             throw new \Exception( $exception_message );
         }
+
+		return $object;
                 
     }    
     
@@ -77,7 +79,7 @@ class Objects {
     * @throws \Exception                // - if $object is not an instance of $class_name and is not null.
     *                                   // - if $class_name is not a string
     * 
-    * @return void
+    * @return mixed
     */
     static public function assertObjectInstanceOfClass( &$object, $class_name, $exception_message = null ){
 
@@ -95,6 +97,8 @@ class Objects {
         if( !is_object($object) || !is_a($object, $class_name) ){
             throw new \Exception( $exception_message );
         }
+
+		return $object;
                 
     }    
     
