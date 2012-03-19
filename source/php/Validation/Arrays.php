@@ -136,4 +136,48 @@ class Arrays{
     }
     
     
+    /**
+     * Returns an array or null input if input is an array or null,
+     * throws an exception if otherwise
+     *  
+     * @param mixed $input
+     * @param string $message Optional message for the exception thrown
+     *  if assertion fails
+     *  
+     * @throws \Exception if $input is not an array or null
+     *  
+     * @return array|null
+     */
+    public static function assertArrayOrNull( $input, $message=null ) {
+    	
+    	if ( is_null($input) ) return $input;
+    	
+    	return self::assertArray( $input, $message );
+    }
+    
+
+    /**
+     * Returns an array if input is an array, throws an
+     * exception if otherwise.
+     *
+     * @param mixed $input
+     * @param string $message Optional message for the exception thrown
+     *  if assertion fails
+     *
+     * @throws \Exception if $input is not an array or null
+     *
+     * @return array
+     */
+    public static function assertArray( $input, $message=null ) {
+    	
+    	if ( ! is_array( $input ) ) {
+    		
+    		$message = ! is_null($message) ? $message : "Value passed is not an array";
+    		
+    		throw new \Exception( $message );
+    	}
+    	
+    }
+    
 }
+
