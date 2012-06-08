@@ -284,6 +284,57 @@ class Arrays{
         return false;
 
     }
+
+
+    /**
+     * Compares row arrays by their first column
+     * This method is meant to be used as a callback for uasort in
+     * self::sortArrayRowsAlphabetically
+     *
+     * @param string[] $row_a
+     * @param string[] $row_b
+     *
+     * @return number
+     */
+    public static function compareArrayRowsAlphabetically( $row_a, $row_b )
+    {
+    	$result = 0;
+    		
+    	$headers = array_keys( $row_a );
+    		
+    	foreach( $headers as $header ) {
+    
+    		$column_a = $row_a[ $header ];
+    		$column_b = isset( $row_b[ $header ] ) ? $row_b[ $header ] : null;
+    
+    		$column_result = strcmp( $column_a, $column_b );
+    
+    		$result = $result*10 + $column_result;
+    	}
+    		
+    	return $result;
+    }
+    
+    
+    /**
+     * Sorts an array of rows by scalar row values, maintain indexes
+     *
+     * @param array $rows
+     *
+     * @throws \Exception if uasort fails
+     *
+     * @return array
+     */
+    public static function sortArrayRowsAlphabetically( $rows )
+    {
+    	\Altumo\Validation\Arrays::assertArray( $rows );
+    
+    	$result_ok = uasort( $rows, '\Altumo\Arrays\Arrays::compareArrayRowsAlphabetically');
+    
+    	if ( ! $result_ok) throw new \Exception('Error sorting rows alphabetically');
+    
+    	return $rows;
+    }
     
     
 }
