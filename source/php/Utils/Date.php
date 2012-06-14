@@ -27,6 +27,12 @@ class Date extends sfDate\sfDate{
     
     protected $time_zone = null;
     protected $date_time_zone = null;
+
+
+    const DATE_PERIOD_DAY = 1;
+    const DATE_PERIOD_WEEKTODATE = 2;
+    const DATE_PERIOD_MONTHTODATE = 3;
+    const DATE_PERIOD_YEARTODATE = 4;
     
     
     /**
@@ -108,6 +114,100 @@ class Date extends sfDate\sfDate{
         return $new_date;
         
     }
+
+
+    /**
+     * Returns beginning or ending of a period
+     * 
+     * @param string $phrase
+     * @param bool $beginning True for boundary beginning, False for boundary ending
+     * 
+     * @throws \Exception if $beginning=false
+     * 
+     * @return self
+     */
+    public function getBoundaryDateByPeriod( $period, $beginning=true )
+    {
+    	$this_timestamp = $this->get();
+    	
+    	switch( $period ){
+    		
+    		case static::DATE_PERIOD_DAY:
+
+    			if ( $beginning ) {
+    				
+	    			// get the beginning of the day
+	    			$result_ts = strtotime( 'today', $this_timestamp );
+	    			
+    			} else {
+    				
+    				throw new \Exception( 'Bounday ending not yet supported' );
+    				
+    			}
+    			
+    			break;
+    			
+    		case static::DATE_PERIOD_WEEKTODATE:
+    			
+    			if ( $beginning ) {
+
+    				// get date of the first day in week from '2012-W12-1'
+    				$result_ts = strtotime( date ("Y-\WW-1", $this_timestamp) );
+    				
+				} else {
+					
+    				throw new \Exception( 'Bounday ending not yet supported' );
+    				
+    			}
+    				
+    			break;
+    			
+    		case static::DATE_PERIOD_MONTHTODATE:
+    			
+    			if ( $beginning ) {
+    				
+    				// get beginning of month
+	    			$result_ts = strtotime( sprintf('%s %s', date('M', $this_timestamp), date('Y', $this_timestamp) ) );
+    				break;
+    				
+    			} else {
+
+    				throw new \Exception( 'Bounday ending not yet supported' );
+   				
+    			}
+    			
+    		case static::DATE_PERIOD_YEARTODATE:
+    			
+    			if ( $beginning ) {
+    				
+    				// get beginning of year
+	    			$result_ts = mktime(0, 0, 0, 1, 1, date('Y', $this_timestamp) );
+    				break;
+    				
+				} else {
+					
+    				throw new \Exception( 'Bounday ending not yet supported' );
+    				
+    			}
+    			
+    		default:
+    			// if period not recognized,
+    			
+    			// throw exception
+    			throw new \Exception('Period not recognized');
+    			
+    	} // switch
+
+    	
+    	if ( $result_ts ) {
+    		
+	    	$result_date = new static;
+	    	$result_date->set( $result_ts );
+	    	
+	    	return $result_date;
+    	}
+    	
+    } // getBoundaryDateByPeriod
 
     
 }
