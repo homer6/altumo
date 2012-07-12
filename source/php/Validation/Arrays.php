@@ -176,6 +176,8 @@ class Arrays{
     		
     		throw new \Exception( $message );
     	}
+
+	return $input;
     	
     }
     
