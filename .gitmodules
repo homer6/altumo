@@ -1,3 +1,0 @@
-[submodule "lib/javascript/vendor/google/closure-library"]
-	path = lib/javascript/vendor/google/closure-library
-	url = git://github.com/homer6/google-closure-library.git
