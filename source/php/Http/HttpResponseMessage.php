@@ -199,7 +199,7 @@ class HttpResponseMessage{
     */
     protected function addHeaderLine( $header_line ){
     
-        $header_line_parts = preg_split( '/:\s?/', $header_line );
+        $header_line_parts = preg_split( '/:\s?/', $header_line, 2 );
         if( count($header_line_parts) < 2 ){
             throw new \Exception('Malformed response header line.');
         }
