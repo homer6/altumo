@@ -80,7 +80,7 @@ class HttpResponseMessage{
             }
         }
 
-        $this->setRawMessageBody( implode('', $raw_response_parts) );
+        $this->setRawMessageBody( implode( "\r\n", $raw_response_parts) );
         
     }
     
