@@ -415,7 +415,7 @@ class OutgoingHttpRequest{
             throw new \Exception('POST parameters must be an array.');
         }
         
-        $this->setMessageBody( http_build_query( $parameters ) );
+        $this->setMessageBody( http_build_query( $post_parameters ) );
 
     }
     
