@@ -151,5 +151,20 @@ class Simple{
    	
    		return $template;
     }
-    
+
+
+	/**
+	 * @param string $opening
+	 * @param string $closing
+	 * 
+	 * @return self
+	 */
+	public function setDelimiters( $opening, $closing )
+	{
+		$this->opening_delimiter = $opening;
+		$this->closing_delimiter = $closing;
+
+		return $this;
+	}
+
 }
